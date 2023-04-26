@@ -12,7 +12,7 @@ class DefaultButton extends StatelessWidget {
 
   const DefaultButton({
     required this.text,
-    this.height = AppSize.s40,
+    this.height = AppSize.s50,
     this.width = double.infinity,
     this.radius = AppSize.s40,
     Key? key,
@@ -33,7 +33,7 @@ class DefaultButton extends StatelessWidget {
           child: Text(text,
               style: Theme.of(context)
                   .textTheme
-                  .titleMedium
+                  .titleLarge
                   ?.copyWith(color: Colors.white))),
     );
   }

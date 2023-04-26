@@ -1,0 +1,18 @@
+{
+  "app_title": "المتجر الالكتروني",
+  "welcome": "مرحبا",
+  "see_All": "المزيد",
+  "sign_up": "انشاء حساب",
+  "sign_in": "تسجيل الدخول",
+  "or": " اقتراحات",
+  "email": "Email",
+  "change_theme": "تغيير ألوان التطبيق",
+  "name": "الاسم",
+  "password": "Password",
+  "logged_In_Successfully": "تم تسجيل الدخول بنجاح",
+  "sign_in_with_google": "تسجيل الدخول بواسطة جوجل",
+  "sign_in_to_continue": "سجل دخولك لرؤية المزيد",
+  "forget_Password": "نسيت رقم السري ؟",
+  "email_Text_Field_Return": "يجب كتابة اللايميل",
+  "password_Text_Field_Return": "يجب ألا يقل الرقم السري عن 6 أرقام"
+}

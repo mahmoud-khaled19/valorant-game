@@ -1,0 +1,18 @@
+{
+  "app_title": "E-Commerce",
+  "welcome": "Welcome",
+  "see_All": "See More",
+  "sign_up": "Sign Up",
+  "sign_in": "Sign in",
+  "or": "- OR -",
+  "email": "Email",
+  "change_theme": "Change Theme",
+  "name": "Name",
+  "password": "Password",
+  "logged_In_Successfully": "Logged in Successfully",
+  "sign_in_with_google": "Sign In With Google",
+  "sign_in_to_continue": "Sign in to Continue",
+  "forget_Password": "Forget Password ?",
+  "email_Text_Field_Return": "Must write your email",
+  "password_Text_Field_Return": "write At Least 6 numbers in your password"
+}

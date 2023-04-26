@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:workers_tasks/app_constance/style_manager.dart';
-import 'package:workers_tasks/app_constance/values_manager.dart';
+import 'package:workers/app_constance/style_manager.dart';
+import 'package:workers/app_constance/values_manager.dart';
 import 'colors_manager.dart';
 
 ThemeData getLightApplicationTheme() {
@@ -13,7 +13,7 @@ ThemeData getLightApplicationTheme() {
       appBarTheme: AppBarTheme(
           titleTextStyle: const TextStyle(
               fontSize: AppSize.s18, fontWeight: FontWeight.bold),
-          backgroundColor: ColorsManager.lightScaffoldColor,
+          backgroundColor: ColorsManager.darkScaffoldColor,
           elevation: 0,
           iconTheme: IconThemeData(color: ColorsManager.black)),
       drawerTheme:
@@ -29,6 +29,8 @@ ThemeData getLightApplicationTheme() {
       disabledColor: ColorsManager.grey,
       cardColor: ColorsManager.lightCardColor,
       textTheme: TextTheme(
+          headlineLarge:
+              getBoldStyle(fontSize: AppSize.s40, color: ColorsManager.black),
           titleLarge: getSemiBoldStyle(
               fontSize: AppSize.s18, color: ColorsManager.black),
           titleMedium:
@@ -64,6 +66,8 @@ ThemeData getDarkApplicationTheme() {
       disabledColor: ColorsManager.grey,
       cardColor: ColorsManager.darkCardColor,
       textTheme: TextTheme(
+          headlineLarge: getBoldStyle(
+              fontSize: AppSize.s40, color: ColorsManager.lightScaffoldColor),
           titleLarge: getSemiBoldStyle(
               fontSize: AppSize.s18, color: ColorsManager.lightScaffoldColor),
           titleMedium: getMediumStyle(

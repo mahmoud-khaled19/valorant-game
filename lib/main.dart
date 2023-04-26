@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:workers/view/auth/login_screen.dart';
 
-import 'package:workers_tasks/app_constance/strings_manager.dart';
-import 'package:workers_tasks/app_constance/theme_manager.dart';
-import 'package:workers_tasks/screens/login_screen.dart';
+import 'app_constance/strings_manager.dart';
+import 'app_constance/theme_manager.dart';
+
 
 void main() {
 
@@ -19,8 +20,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: AppStrings.appTitle,
-      theme: getLightApplicationTheme(),
-      home: const LoginScreen(),
+      theme: getDarkApplicationTheme(),
+      home:  const LoginScreen(),
     );
   }
 }

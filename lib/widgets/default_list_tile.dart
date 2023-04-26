@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workers/app_constance/values_manager.dart';
 
 import 'default_custom_text.dart';
 
@@ -20,11 +21,10 @@ class DefaultListTile extends StatelessWidget {
       child: ListTile(
         title: DefaultCustomText(
             text: text,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(fontSize: 14)),
+            style:
+                Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 14)),
         leading: Image(
+          height: AppSize.s30,
           image: AssetImage(image),
         ),
         onTap: function,

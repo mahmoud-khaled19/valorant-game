@@ -1,6 +1,6 @@
 {
-    "name": "workers_tasks",
-    "short_name": "workers_tasks",
+    "name": "workers",
+    "short_name": "workers",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
