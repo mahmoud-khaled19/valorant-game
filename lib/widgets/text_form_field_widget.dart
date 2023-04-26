@@ -8,22 +8,28 @@ class DefaultTextFormField extends StatelessWidget {
   final String? Function(String? val)? validate;
   final String label;
   final IconData? prefixIcon;
-
   final IconData? suffixIcon;
   final Function()? suffixFunction;
   final bool isSecure;
   final TextInputType textType;
+  final TextInputAction textTypeAction;
+  final FocusNode? focusNode;
+  final Function()? onSubmittedFunction;
 
-  const DefaultTextFormField(
-      {super.key,
-      required this.controller,
-      required this.validate,
-      required this.label,
-      required this.prefixIcon,
-      this.suffixIcon,
-      this.suffixFunction,
-      this.isSecure = false,
-      this.textType = TextInputType.emailAddress});
+  const DefaultTextFormField({
+    super.key,
+    this.onSubmittedFunction,
+    required this.controller,
+    required this.validate,
+    required this.label,
+    required this.prefixIcon,
+    this.focusNode,
+    this.suffixIcon,
+    this.suffixFunction,
+    this.isSecure = false,
+    this.textType = TextInputType.emailAddress,
+    this.textTypeAction = TextInputAction.next,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +39,9 @@ class DefaultTextFormField extends StatelessWidget {
           height: 12,
         ),
         TextFormField(
+          onEditingComplete: onSubmittedFunction,
+          focusNode: focusNode,
+          textInputAction: textTypeAction,
           style: Theme.of(context).textTheme.titleMedium,
           obscureText: isSecure,
           keyboardType: textType,

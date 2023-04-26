@@ -7,4 +7,9 @@ class GlobalMethods{
         context,
         MaterialPageRoute(builder: (context) =>  widget));
   }
+  static navigateAndFinish(context,Widget widget){
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) =>  widget));
+  }
 }

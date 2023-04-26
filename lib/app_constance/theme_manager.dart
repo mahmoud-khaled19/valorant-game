@@ -63,12 +63,12 @@ ThemeData getDarkApplicationTheme() {
       cardColor: ColorsManager.darkCardColor,
       textTheme: TextTheme(
           headlineLarge: getBoldStyle(
-              fontSize: AppSize.s40, color: ColorsManager.lightScaffoldColor),
+              fontSize: AppSize.s30, color: ColorsManager.lightScaffoldColor),
           titleLarge: getSemiBoldStyle(
               fontSize: AppSize.s18, color: ColorsManager.lightScaffoldColor),
           titleMedium: getMediumStyle(
               fontSize: AppSize.s16, color: ColorsManager.lightScaffoldColor),
-          titleSmall: getRegularStyle(
+          titleSmall: getMediumStyle(
               fontSize: AppSize.s14, color: ColorsManager.lightScaffoldColor)),
       brightness: Brightness.dark);
 }

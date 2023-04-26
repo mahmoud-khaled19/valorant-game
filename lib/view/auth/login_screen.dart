@@ -13,12 +13,15 @@ import '../../widgets/default_custom_text.dart';
 import '../../widgets/default_list_tile.dart';
 import '../../widgets/text_form_field_widget.dart';
 import '../screens/home_screen.dart';
+import 'forgot_password.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    FocusNode emailFocusNode = FocusNode();
+    FocusNode passwordFocusNode = FocusNode();
     var emailController = TextEditingController();
     var passwordController = TextEditingController();
     var formKey = GlobalKey<FormState>();
@@ -36,6 +39,7 @@ class LoginScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(AppSize.s20),
                     child: ListView(
+                      physics: const BouncingScrollPhysics(),
                       children: [
                         const SizedBox(
                           height: AppSize.s70,
@@ -43,7 +47,10 @@ class LoginScreen extends StatelessWidget {
                         DefaultCustomText(
                           alignment: Alignment.centerLeft,
                           text: AppStrings.login,
-                          style: Theme.of(context).textTheme.headlineLarge,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headlineLarge,
                         ),
                         const SizedBox(
                           height: AppSize.s10,
@@ -51,12 +58,20 @@ class LoginScreen extends StatelessWidget {
                         DefaultCustomText(
                           alignment: Alignment.centerLeft,
                           text: AppStrings.welcomeMessage,
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleLarge,
                         ),
                         const SizedBox(
                           height: AppSize.s30,
                         ),
                         DefaultTextFormField(
+                          onSubmittedFunction: () {
+                            FocusScope.of(context).requestFocus(
+                                passwordFocusNode);
+                          },
+                          focusNode: emailFocusNode,
                           controller: emailController,
                           validate: (String? value) {
                             if (value!.isEmpty) {
@@ -69,6 +84,8 @@ class LoginScreen extends StatelessWidget {
                           prefixIcon: Icons.email,
                         ),
                         DefaultTextFormField(
+                          textTypeAction: TextInputAction.done,
+                          focusNode: passwordFocusNode,
                           isSecure: cubit.isVisible,
                           controller: passwordController,
                           suffixIcon: cubit.isVisible
@@ -90,10 +107,23 @@ class LoginScreen extends StatelessWidget {
                         const SizedBox(
                           height: AppSize.s10,
                         ),
-                        DefaultCustomText(
-                          alignment: Alignment.centerRight,
-                          text: AppStrings.forgetPassword,
-                          style: Theme.of(context).textTheme.titleSmall,
+                        GestureDetector(
+                          onTap: () {
+                            GlobalMethods.navigateAndFinish(
+                                context, const ForgotPasswordScreen());
+                          },
+                          child: DefaultCustomText(
+                            alignment: Alignment.centerRight,
+                            text: AppStrings.forgetPassword,
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                fontStyle: FontStyle.italic,
+                                decoration: TextDecoration.underline
+                            ),
+                          ),
                         ),
                         const SizedBox(
                           height: AppSize.s30,
@@ -107,6 +137,7 @@ class LoginScreen extends StatelessWidget {
                               text: AppStrings.login,
                               function: () {
                                 if (formKey.currentState!.validate()) {
+                                  FocusScope.of(context).unfocus();
                                   GlobalMethods.navigateTo(
                                       context, const HomeScreen());
                                 }
@@ -117,7 +148,10 @@ class LoginScreen extends StatelessWidget {
                         ),
                         DefaultCustomText(
                           text: AppStrings.or,
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleLarge,
                         ),
                         const SizedBox(
                           height: AppSize.s20,
@@ -125,8 +159,8 @@ class LoginScreen extends StatelessWidget {
                         DefaultListTile(
                           text: AppStrings.signUpWithEmail,
                           function: () {
-                            GlobalMethods.navigateTo(
-                                context, const RegisterScreen());
+                            GlobalMethods.navigateAndFinish(
+                                context, RegisterScreen());
                           },
                           image: Assets.imagesEmail,
                         ),

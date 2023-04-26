@@ -9,18 +9,25 @@ import '../../widgets/animation_login_widget.dart';
 import '../../widgets/default_button_widget.dart';
 import '../../widgets/default_custom_text.dart';
 import '../../widgets/text_form_field_widget.dart';
-import '../screens/home_screen.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  RegisterScreen({Key? key}) : super(key: key);
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    var emailController = TextEditingController();
-    var nameController = TextEditingController();
-    var phoneController = TextEditingController();
-    var passwordController = TextEditingController();
-    var formKey = GlobalKey<FormState>();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController nameController = TextEditingController();
+    TextEditingController phoneController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    TextEditingController positionController = TextEditingController();
+    FocusNode nameFocusNode = FocusNode();
+    FocusNode emailFocusNode = FocusNode();
+    FocusNode passwordFocusNode = FocusNode();
+    FocusNode phoneFocusNode = FocusNode();
+    FocusNode positionFocusNode = FocusNode();
+    double size = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (context) => AuthCubit(),
       child: BlocBuilder<AuthCubit, AuthState>(
@@ -35,9 +42,10 @@ class RegisterScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(AppSize.s20),
                     child: ListView(
+                      physics: const BouncingScrollPhysics(),
                       children: [
-                        const SizedBox(
-                          height: AppSize.s50,
+                        SizedBox(
+                          height: size * 0.05,
                         ),
                         DefaultCustomText(
                           alignment: Alignment.centerLeft,
@@ -50,12 +58,16 @@ class RegisterScreen extends StatelessWidget {
                         DefaultCustomText(
                           alignment: Alignment.centerLeft,
                           text: AppStrings.registerMessage,
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                         const SizedBox(
-                          height: AppSize.s30,
+                          height: AppSize.s20,
                         ),
                         DefaultTextFormField(
+                          onSubmittedFunction: () {
+                            FocusScope.of(context).requestFocus(phoneFocusNode);
+                          },
+                          focusNode: nameFocusNode,
                           controller: nameController,
                           validate: (String? value) {
                             if (value!.isEmpty) {
@@ -68,6 +80,11 @@ class RegisterScreen extends StatelessWidget {
                           prefixIcon: Icons.person,
                         ),
                         DefaultTextFormField(
+                          onSubmittedFunction: () {
+                            FocusScope.of(context)
+                                .requestFocus(positionFocusNode);
+                          },
+                          focusNode: phoneFocusNode,
                           textType: TextInputType.phone,
                           controller: phoneController,
                           validate: (String? value) {
@@ -81,6 +98,27 @@ class RegisterScreen extends StatelessWidget {
                           prefixIcon: Icons.phone,
                         ),
                         DefaultTextFormField(
+                          onSubmittedFunction: () {
+                            FocusScope.of(context).requestFocus(emailFocusNode);
+                          },
+                          focusNode: positionFocusNode,
+                          controller: positionController,
+                          validate: (String? value) {
+                            if (value!.isEmpty) {
+                              return AppStrings.positionValidateMessage;
+                            } else {
+                              return null;
+                            }
+                          },
+                          label: AppStrings.labelPosition,
+                          prefixIcon: Icons.work_history_outlined,
+                        ),
+                        DefaultTextFormField(
+                          onSubmittedFunction: () {
+                            FocusScope.of(context)
+                                .requestFocus(passwordFocusNode);
+                          },
+                          focusNode: emailFocusNode,
                           controller: emailController,
                           validate: (String? value) {
                             if (value!.isEmpty) {
@@ -93,6 +131,8 @@ class RegisterScreen extends StatelessWidget {
                           prefixIcon: Icons.email,
                         ),
                         DefaultTextFormField(
+                          focusNode: passwordFocusNode,
+                          textTypeAction: TextInputAction.done,
                           isSecure: cubit.isVisible,
                           controller: passwordController,
                           suffixIcon: cubit.isVisible
@@ -112,7 +152,7 @@ class RegisterScreen extends StatelessWidget {
                           prefixIcon: Icons.lock,
                         ),
                         const SizedBox(
-                          height: AppSize.s30,
+                          height: AppSize.s20,
                         ),
                         Visibility(
                           visible: state is! LoginInWithEmailLoadingState,
@@ -123,13 +163,10 @@ class RegisterScreen extends StatelessWidget {
                               text: AppStrings.login,
                               function: () {
                                 if (formKey.currentState!.validate()) {
-                                  GlobalMethods.navigateTo(
-                                      context, const HomeScreen());
+                                  emailController.clear();
+                                  emailController.clear();
                                 }
                               }),
-                        ),
-                        const SizedBox(
-                          height: AppSize.s20,
                         ),
                         Row(
                           children: [
@@ -138,14 +175,15 @@ class RegisterScreen extends StatelessWidget {
                                 style: Theme.of(context).textTheme.titleSmall),
                             TextButton(
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  GlobalMethods.navigateTo(
+                                      context, const LoginScreen());
                                 },
                                 child: const Text(
                                   AppStrings.login,
                                   style: TextStyle(color: Colors.blue),
                                 ))
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
