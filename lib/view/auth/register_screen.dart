@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/app_constance/global_methods.dart';
-import 'package:workers/view/auth/register_screen.dart';
 import '../../app_constance/strings_manager.dart';
 import '../../app_constance/values_manager.dart';
-import '../../generated/assets.dart';
 import '../../view_model/auth_cubit/auth_cubit.dart';
 import '../../view_model/auth_cubit/auth_state.dart';
 import '../../widgets/animation_login_widget.dart';
 import '../../widgets/default_button_widget.dart';
 import '../../widgets/default_custom_text.dart';
-import '../../widgets/default_list_tile.dart';
 import '../../widgets/text_form_field_widget.dart';
 import '../screens/home_screen.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var emailController = TextEditingController();
+    var nameController = TextEditingController();
+    var phoneController = TextEditingController();
     var passwordController = TextEditingController();
     var formKey = GlobalKey<FormState>();
     return BlocProvider(
@@ -38,11 +37,11 @@ class LoginScreen extends StatelessWidget {
                     child: ListView(
                       children: [
                         const SizedBox(
-                          height: AppSize.s70,
+                          height: AppSize.s50,
                         ),
                         DefaultCustomText(
                           alignment: Alignment.centerLeft,
-                          text: AppStrings.login,
+                          text: AppStrings.register,
                           style: Theme.of(context).textTheme.headlineLarge,
                         ),
                         const SizedBox(
@@ -50,11 +49,36 @@ class LoginScreen extends StatelessWidget {
                         ),
                         DefaultCustomText(
                           alignment: Alignment.centerLeft,
-                          text: AppStrings.welcomeMessage,
+                          text: AppStrings.registerMessage,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(
                           height: AppSize.s30,
+                        ),
+                        DefaultTextFormField(
+                          controller: nameController,
+                          validate: (String? value) {
+                            if (value!.isEmpty) {
+                              return AppStrings.nameValidateMessage;
+                            } else {
+                              return null;
+                            }
+                          },
+                          label: AppStrings.labelName,
+                          prefixIcon: Icons.person,
+                        ),
+                        DefaultTextFormField(
+                          textType: TextInputType.phone,
+                          controller: phoneController,
+                          validate: (String? value) {
+                            if (value!.isEmpty) {
+                              return AppStrings.phoneValidateMessage;
+                            } else {
+                              return null;
+                            }
+                          },
+                          label: AppStrings.labelPhone,
+                          prefixIcon: Icons.phone,
                         ),
                         DefaultTextFormField(
                           controller: emailController,
@@ -88,14 +112,6 @@ class LoginScreen extends StatelessWidget {
                           prefixIcon: Icons.lock,
                         ),
                         const SizedBox(
-                          height: AppSize.s10,
-                        ),
-                        DefaultCustomText(
-                          alignment: Alignment.centerRight,
-                          text: AppStrings.forgetPassword,
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        const SizedBox(
                           height: AppSize.s30,
                         ),
                         Visibility(
@@ -115,28 +131,21 @@ class LoginScreen extends StatelessWidget {
                         const SizedBox(
                           height: AppSize.s20,
                         ),
-                        DefaultCustomText(
-                          text: AppStrings.or,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(
-                          height: AppSize.s20,
-                        ),
-                        DefaultListTile(
-                          text: AppStrings.signUpWithEmail,
-                          function: () {
-                            GlobalMethods.navigateTo(
-                                context, const RegisterScreen());
-                          },
-                          image: Assets.imagesEmail,
-                        ),
-                        const SizedBox(
-                          height: AppSize.s10,
-                        ),
-                        DefaultListTile(
-                            text: AppStrings.signUpWithGmail,
-                            function: () {},
-                            image: Assets.imagesGoogle),
+                        Row(
+                          children: [
+                            DefaultCustomText(
+                                text: AppStrings.alreadyHaveAccount,
+                                style: Theme.of(context).textTheme.titleSmall),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  AppStrings.login,
+                                  style: TextStyle(color: Colors.blue),
+                                ))
+                          ],
+                        )
                       ],
                     ),
                   ),

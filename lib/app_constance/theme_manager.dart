@@ -18,8 +18,6 @@ ThemeData getLightApplicationTheme() {
           iconTheme: IconThemeData(color: ColorsManager.black)),
       drawerTheme:
           DrawerThemeData(backgroundColor: ColorsManager.lightScaffoldColor),
-      colorScheme:
-          ColorScheme.light(background: ColorsManager.lightBackgroundColor),
       iconTheme: IconThemeData(
           color: ColorsManager.lightIconsColor, size: AppSize.s25),
       scaffoldBackgroundColor: ColorsManager.lightScaffoldColor,
@@ -55,8 +53,6 @@ ThemeData getDarkApplicationTheme() {
       ),
       drawerTheme:
           DrawerThemeData(backgroundColor: ColorsManager.darkScaffoldColor),
-      colorScheme:
-          ColorScheme.dark(background: ColorsManager.lightBackgroundColor),
       iconTheme:
           IconThemeData(color: ColorsManager.darkIconsColor, size: AppSize.s25),
       scaffoldBackgroundColor: ColorsManager.darkScaffoldColor,

@@ -30,7 +30,7 @@ class DefaultTextFormField extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(
-          height: 20,
+          height: 12,
         ),
         TextFormField(
           style: Theme.of(context).textTheme.titleMedium,
