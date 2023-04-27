@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/app_constance/strings_manager.dart';
 import 'package:workers/app_constance/values_manager.dart';
-import 'package:workers/view/auth/login_screen.dart';
-import 'package:workers/widgets/default_button_widget.dart';
-import 'package:workers/widgets/default_custom_text.dart';
+import 'package:workers/view/screens/auth/login_screen.dart';
+import '../../widgets/default_button_widget.dart';
+import '../../widgets/default_custom_text.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -43,6 +43,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   if (value!.isEmpty) {
                     return AppStrings.emailValidateMessage;
                   }
+                  return null;
                 },
                 decoration: InputDecoration(
                   filled: true,
@@ -78,7 +79,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   function: () {
                     if (formKey.currentState!.validate()) {
                       GlobalMethods.navigateAndFinish(
-                          context, const LoginScreen());
+                          context,  const LoginScreen());
                     }
                   })
             ],

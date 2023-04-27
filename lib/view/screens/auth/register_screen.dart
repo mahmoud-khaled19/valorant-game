@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/app_constance/global_methods.dart';
-import '../../app_constance/strings_manager.dart';
-import '../../app_constance/values_manager.dart';
-import '../../view_model/auth_cubit/auth_cubit.dart';
-import '../../view_model/auth_cubit/auth_state.dart';
+import '../../../app_constance/strings_manager.dart';
+import '../../../app_constance/values_manager.dart';
+import '../../../view_model/auth_cubit/auth_cubit.dart';
+import '../../../view_model/auth_cubit/auth_state.dart';
 import '../../widgets/animation_login_widget.dart';
 import '../../widgets/default_button_widget.dart';
 import '../../widgets/default_custom_text.dart';

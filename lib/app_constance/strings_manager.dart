@@ -3,8 +3,10 @@ class AppStrings {
   static const String signUpWithEmail = 'Sign Up with Email';
   static const String signUpWithGmail = 'Sign Up with Gmail';
   static const String or = '-  OR -';
+  static const String tasks = 'Tasks';
   static const String login = 'Login';
   static const String register = 'Register';
+  static const String delete = 'Delete';
   static const String registerMessage = 'Register Now to Be Part of Us';
   static const String forgetPassword = 'Forgot your password ?';
   static const String forgetPasswordTitle = 'Forget password';
@@ -12,6 +14,18 @@ class AppStrings {
   static const String alreadyHaveAccount = 'Already have Account ?';
   static const String forgetPasswordMessage = 'Email Address';
   static const String resetPassword = 'Reset Password';
+  static const String allTasks = 'All Tasks';
+  static const String account = 'My Account';
+  static const String addTask = 'Add Task';
+  static const String workers = 'Workers';
+  static const String logout = 'Log Out';
+  static const String close = 'Close';
+  static const String cancel = 'Cancel';
+  static const String ok = 'Ok';
+  static const String signOut = 'Sign Out';
+  static const String allFieldsRequired = 'All Fields Required';
+  static const String signOutMessage = 'Do you want to Sign Out ?';
+  static const String cancelFilter = 'Cancel Filter';
 
 
   // label
@@ -20,6 +34,7 @@ class AppStrings {
   static const String labelName = 'Name';
   static const String labelPhone = 'phone';
   static const String labelPosition = 'position';
+
 
   // validate
 

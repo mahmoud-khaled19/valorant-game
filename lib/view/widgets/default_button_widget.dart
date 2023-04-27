@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../app_constance/colors_manager.dart';
-import '../app_constance/values_manager.dart';
+import '../../app_constance/colors_manager.dart';
+import '../../app_constance/values_manager.dart';
 
 class DefaultButton extends StatelessWidget {
   final String text;

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../app_constance/assets_manager.dart';
+import '../../app_constance/assets_manager.dart';
 
 class LoginAnimationWidget extends StatefulWidget {
   const LoginAnimationWidget({Key? key}) : super(key: key);

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/app_constance/global_methods.dart';
-import 'package:workers/view/auth/register_screen.dart';
-import '../../app_constance/strings_manager.dart';
-import '../../app_constance/values_manager.dart';
-import '../../generated/assets.dart';
-import '../../view_model/auth_cubit/auth_cubit.dart';
-import '../../view_model/auth_cubit/auth_state.dart';
+import 'package:workers/view/screens/auth/register_screen.dart';
+import '../../../app_constance/strings_manager.dart';
+import '../../../app_constance/values_manager.dart';
+import '../../../generated/assets.dart';
+import '../../../view_model/auth_cubit/auth_cubit.dart';
+import '../../../view_model/auth_cubit/auth_state.dart';
 import '../../widgets/animation_login_widget.dart';
 import '../../widgets/default_button_widget.dart';
 import '../../widgets/default_custom_text.dart';
 import '../../widgets/default_list_tile.dart';
 import '../../widgets/text_form_field_widget.dart';
-import '../screens/home_screen.dart';
+import '../home/home_screen.dart';
 import 'forgot_password.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -109,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            GlobalMethods.navigateAndFinish(
+                            GlobalMethods.navigateTo(
                                 context, const ForgotPasswordScreen());
                           },
                           child: DefaultCustomText(
@@ -139,7 +139,7 @@ class LoginScreen extends StatelessWidget {
                                 if (formKey.currentState!.validate()) {
                                   FocusScope.of(context).unfocus();
                                   GlobalMethods.navigateTo(
-                                      context, const HomeScreen());
+                                      context,  HomeScreen());
                                 }
                               }),
                         ),
@@ -157,20 +157,26 @@ class LoginScreen extends StatelessWidget {
                           height: AppSize.s20,
                         ),
                         DefaultListTile(
-                          text: AppStrings.signUpWithEmail,
+                          title: AppStrings.signUpWithEmail,
                           function: () {
                             GlobalMethods.navigateAndFinish(
                                 context, RegisterScreen());
                           },
-                          image: Assets.imagesEmail,
+                          leadingWidget: const Image(
+                            height: AppSize.s30,
+                            image: AssetImage(Assets.imagesEmail),
+                          ),
                         ),
                         const SizedBox(
                           height: AppSize.s10,
                         ),
                         DefaultListTile(
-                            text: AppStrings.signUpWithGmail,
+                            title: AppStrings.signUpWithGmail,
                             function: () {},
-                            image: Assets.imagesGoogle),
+                            leadingWidget: const Image(
+                              height: AppSize.s30,
+                              image: AssetImage(Assets.imagesGoogle),
+                            )),
                       ],
                     ),
                   ),

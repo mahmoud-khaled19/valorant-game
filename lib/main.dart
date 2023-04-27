@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:workers/view/auth/login_screen.dart';
+import 'package:workers/view/screens/auth/login_screen.dart';
 import 'app_constance/strings_manager.dart';
 import 'app_constance/theme_manager.dart';
 import 'firebase_options.dart';
