@@ -4,6 +4,10 @@ class LoginInitial extends AuthState {}
 
 class ChangePasswordVisibility extends AuthState {}
 
+class ChangeImage extends AuthState {}
+
+class CropImage extends AuthState {}
+
 class CurveAnimationState extends AuthState {}
 
 class RegisterWithEmailLoadingState extends AuthState {}

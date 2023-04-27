@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:workers/app_constance/strings_manager.dart';
-
-import '../view/widgets/default_custom_text.dart';
 
 class GlobalMethods {
   static navigateTo(context, Widget widget) {
@@ -29,5 +26,14 @@ class GlobalMethods {
     'Designing',
     'Human Resources',
     'IT',
+  ];
+  static final List<String> jopPositions = [
+    'Full Stack Developer',
+    'Accountant',
+    'Manager',
+    'Designer',
+    'Mobile Developer',
+    'Digital Marketing',
+    'Team Leader /Tester',
   ];
 }

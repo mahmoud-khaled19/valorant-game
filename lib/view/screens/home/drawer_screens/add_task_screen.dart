@@ -59,7 +59,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               itemBuilder: (context, index) {
                                 return InkWell(
                                   onTap: () {
-                                    categoryController.text = GlobalMethods.tasksSort[index];
+                                    categoryController.text =
+                                        GlobalMethods.tasksSort[index];
                                     Navigator.pop(context);
                                   },
                                   child: Row(
@@ -73,15 +74,17 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleSmall
-                                            ?.copyWith(fontStyle: FontStyle.italic),
+                                            ?.copyWith(
+                                                fontStyle: FontStyle.italic),
                                       ),
                                     ],
                                   ),
                                 );
                               },
                               itemCount: GlobalMethods.tasksSort.length,
-                              separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      const Divider(),
                             ),
                           ),
                           actions: [
@@ -94,24 +97,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                   },
                                   child: DefaultCustomText(
                                       text: AppStrings.close,
-                                      style: Theme.of(context).textTheme.titleSmall),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall),
                                 ),
                               ],
                             )
                           ],
                         );
                       });
-
                 },
                 enabled: false,
                 controller: categoryController,
                 validate: (String? value) {
                   if (value!.isEmpty) {
-                     return categoryController.text = 'Choose Category';
-                  }
-                  else{
-
-                  }
+                    return categoryController.text = 'Choose Category';
+                  } else {}
                 },
                 label: 'Task Category',
               ),
@@ -180,5 +181,4 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       ),
     );
   }
-
 }

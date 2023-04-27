@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/app_constance/global_methods.dart';
@@ -14,19 +15,15 @@ import 'login_screen.dart';
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
   final formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController positionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
-    TextEditingController nameController = TextEditingController();
-    TextEditingController phoneController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController positionController = TextEditingController();
-    FocusNode nameFocusNode = FocusNode();
-    FocusNode emailFocusNode = FocusNode();
-    FocusNode passwordFocusNode = FocusNode();
-    FocusNode phoneFocusNode = FocusNode();
-    FocusNode positionFocusNode = FocusNode();
+
     double size = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (context) => AuthCubit(),
@@ -63,28 +60,65 @@ class RegisterScreen extends StatelessWidget {
                         const SizedBox(
                           height: AppSize.s20,
                         ),
-                        DefaultTextFormField(
-                          onSubmittedFunction: () {
-                            FocusScope.of(context).requestFocus(phoneFocusNode);
-                          },
-                          focusNode: nameFocusNode,
-                          controller: nameController,
-                          validate: (String? value) {
-                            if (value!.isEmpty) {
-                              return AppStrings.nameValidateMessage;
-                            } else {
-                              return null;
-                            }
-                          },
-                          label: AppStrings.labelName,
-                          prefixIcon: Icons.person,
+                        Row(
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: DefaultTextFormField(
+                                controller: nameController,
+                                validate: (String? value) {
+                                  if (value!.isEmpty) {
+                                    return AppStrings.nameValidateMessage;
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                label: AppStrings.labelName,
+                                prefixIcon: Icons.person,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Flexible(
+                              child: Stack(
+                                alignment: Alignment.topRight,
+                                children: [
+                                  Container(
+                                    height:
+                                        MediaQuery.of(context).size.height *
+                                            0.12,
+                                    width:
+                                        MediaQuery.of(context).size.height *
+                                            0.12,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: cubit.imageFile == null
+                                          ? CachedNetworkImage(
+                                               imageUrl: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',)
+                                          : Image.file(
+                                              cubit.imageFile!,
+                                              fit: BoxFit.fill,
+                                            ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        cubit.choosePhotoDialog(context);
+                                      },
+                                      icon: Icon(cubit.imageFile == null
+                                          ? Icons.add_a_photo
+                                          : Icons.edit))
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                         DefaultTextFormField(
-                          onSubmittedFunction: () {
-                            FocusScope.of(context)
-                                .requestFocus(positionFocusNode);
-                          },
-                          focusNode: phoneFocusNode,
                           textType: TextInputType.phone,
                           controller: phoneController,
                           validate: (String? value) {
@@ -98,10 +132,10 @@ class RegisterScreen extends StatelessWidget {
                           prefixIcon: Icons.phone,
                         ),
                         DefaultTextFormField(
-                          onSubmittedFunction: () {
-                            FocusScope.of(context).requestFocus(emailFocusNode);
+                          enabled: false,
+                          function: () {
+                            showPosition(context);
                           },
-                          focusNode: positionFocusNode,
                           controller: positionController,
                           validate: (String? value) {
                             if (value!.isEmpty) {
@@ -114,11 +148,6 @@ class RegisterScreen extends StatelessWidget {
                           prefixIcon: Icons.work_history_outlined,
                         ),
                         DefaultTextFormField(
-                          onSubmittedFunction: () {
-                            FocusScope.of(context)
-                                .requestFocus(passwordFocusNode);
-                          },
-                          focusNode: emailFocusNode,
                           controller: emailController,
                           validate: (String? value) {
                             if (value!.isEmpty) {
@@ -131,7 +160,6 @@ class RegisterScreen extends StatelessWidget {
                           prefixIcon: Icons.email,
                         ),
                         DefaultTextFormField(
-                          focusNode: passwordFocusNode,
                           textTypeAction: TextInputAction.done,
                           isSecure: cubit.isVisible,
                           controller: passwordController,
@@ -162,10 +190,7 @@ class RegisterScreen extends StatelessWidget {
                           child: DefaultButton(
                               text: AppStrings.login,
                               function: () {
-                                if (formKey.currentState!.validate()) {
-                                  emailController.clear();
-                                  emailController.clear();
-                                }
+                                if (formKey.currentState!.validate()) {}
                               }),
                         ),
                         Row(
@@ -195,4 +220,68 @@ class RegisterScreen extends StatelessWidget {
       ),
     );
   }
+
+  void showPosition(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text(
+                AppStrings.tasks,
+              ),
+            ),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.7,
+              child: ListView.separated(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      positionController.text =
+                          GlobalMethods.jopPositions[index];
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(Icons.check_box),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          GlobalMethods.jopPositions[index],
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(fontStyle: FontStyle.italic),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                itemCount: GlobalMethods.tasksSort.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+              ),
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: DefaultCustomText(
+                        text: AppStrings.close,
+                        style: Theme.of(context).textTheme.titleSmall),
+                  ),
+                ],
+              )
+            ],
+          );
+        });
+  }
+
 }

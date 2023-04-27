@@ -38,6 +38,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                 height: AppSize.s20,
               ),
               TextFormField(
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Colors.black
+                ),
                 controller: emailController,
                 validator: (String? value) {
                   if (value!.isEmpty) {

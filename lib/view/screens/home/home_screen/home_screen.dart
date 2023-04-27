@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/app_constance/strings_manager.dart';
-import '../../components/task_Item.dart';
-import '../../widgets/default_custom_text.dart';
-import '../../widgets/drawer_widget.dart';
+import '../../../components/task_Item.dart';
+import '../../../widgets/default_custom_text.dart';
+import '../../../widgets/drawer_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);

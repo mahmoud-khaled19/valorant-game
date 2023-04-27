@@ -4,6 +4,8 @@ class AppStrings {
   static const String signUpWithGmail = 'Sign Up with Gmail';
   static const String or = '-  OR -';
   static const String tasks = 'Tasks';
+  static const String contactInfo = 'Contact Info';
+  static const String companyWorkers = 'Company Workers';
   static const String login = 'Login';
   static const String register = 'Register';
   static const String delete = 'Delete';

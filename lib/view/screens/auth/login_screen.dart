@@ -12,7 +12,7 @@ import '../../widgets/default_button_widget.dart';
 import '../../widgets/default_custom_text.dart';
 import '../../widgets/default_list_tile.dart';
 import '../../widgets/text_form_field_widget.dart';
-import '../home/home_screen.dart';
+import '../home/home_screen/home_screen.dart';
 import 'forgot_password.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -95,7 +95,7 @@ class LoginScreen extends StatelessWidget {
                             cubit.changePasswordVisibility();
                           },
                           validate: (String? value) {
-                            if (value!.isEmpty) {
+                            if (value!.isEmpty && value.length <6) {
                               return AppStrings.passwordValidateMessage;
                             } else {
                               return null;
@@ -138,8 +138,8 @@ class LoginScreen extends StatelessWidget {
                               function: () {
                                 if (formKey.currentState!.validate()) {
                                   FocusScope.of(context).unfocus();
-                                  GlobalMethods.navigateTo(
-                                      context,  HomeScreen());
+                                  GlobalMethods.navigateAndFinish(
+                                      context,  const HomeScreen());
                                 }
                               }),
                         ),
