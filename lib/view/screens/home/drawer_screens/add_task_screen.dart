@@ -42,19 +42,76 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
               DefaultTextFormField(
                 function: () {
-                  GlobalMethods.showTasksCategoryMethod(context, widget: const Text(''),);
-                  setState(() {
-                    print('${categoryController.text} tt');
-                  });
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Center(
+                            child: Text(
+                              AppStrings.tasks,
+                            ),
+                          ),
+                          content: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    categoryController.text = GlobalMethods.tasksSort[index];
+                                    Navigator.pop(context);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.check_box),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        GlobalMethods.tasksSort[index],
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(fontStyle: FontStyle.italic),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              itemCount: GlobalMethods.tasksSort.length,
+                              separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(),
+                            ),
+                          ),
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: DefaultCustomText(
+                                      text: AppStrings.close,
+                                      style: Theme.of(context).textTheme.titleSmall),
+                                ),
+                              ],
+                            )
+                          ],
+                        );
+                      });
 
                 },
                 enabled: false,
                 controller: categoryController,
                 validate: (String? value) {
                   if (value!.isEmpty) {
-                    return categoryController.text = 'Choose Category';
+                     return categoryController.text = 'Choose Category';
                   }
-                  return null;
+                  else{
+
+                  }
                 },
                 label: 'Task Category',
               ),
@@ -123,4 +180,5 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       ),
     );
   }
+
 }

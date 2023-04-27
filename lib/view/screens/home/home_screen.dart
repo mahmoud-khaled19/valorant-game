@@ -17,12 +17,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                GlobalMethods.showTasksCategoryMethod(context,widget: TextButton(
-                  onPressed: () {},
-                  child: DefaultCustomText(
-                      text: AppStrings.cancelFilter,
-                      style: Theme.of(context).textTheme.titleSmall),
-                ));
+                showCategories(context);
               },
               icon: const Icon(Icons.sort_outlined))
         ],
@@ -42,5 +37,69 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
+ showCategories(context){
+   showDialog(
+       context: context,
+       builder: (context) {
+         return AlertDialog(
+           title: const Center(
+             child: Text(
+               AppStrings.tasks,
+             ),
+           ),
+           content: SizedBox(
+             width: MediaQuery.of(context).size.width * 0.7,
+             child: ListView.separated(
+               shrinkWrap: true,
+               physics: const BouncingScrollPhysics(),
+               itemBuilder: (context, index) {
+                 return InkWell(
+                   onTap: () {
+                   },
+                   child: Row(
+                     children: [
+                       const Icon(Icons.check_box),
+                       const SizedBox(
+                         width: 10,
+                       ),
+                       Text(
+                         GlobalMethods.tasksSort[index],
+                         style: Theme.of(context)
+                             .textTheme
+                             .titleSmall
+                             ?.copyWith(fontStyle: FontStyle.italic),
+                       ),
+                     ],
+                   ),
+                 );
+               },
+               itemCount: GlobalMethods.tasksSort.length,
+               separatorBuilder: (BuildContext context, int index) =>
+               const Divider(),
+             ),
+           ),
+           actions: [
+             Row(
+               mainAxisAlignment: MainAxisAlignment.end,
+               children: [
+                 TextButton(
+                   onPressed: () {
+                     Navigator.pop(context);
+                   },
+                   child: DefaultCustomText(
+                       text: AppStrings.close,
+                       style: Theme.of(context).textTheme.titleSmall),
+                 ),
+                 TextButton(
+                   onPressed: () {},
+                   child: DefaultCustomText(
+                       text: AppStrings.cancelFilter,
+                       style: Theme.of(context).textTheme.titleSmall),
+                 )
+               ],
+             )
+           ],
+         );
+       });
+ }
 }
