@@ -23,6 +23,7 @@ class AppStrings {
   static const String logout = 'Log Out';
   static const String close = 'Close';
   static const String cancel = 'Cancel';
+  static const String back = 'Back';
   static const String ok = 'Ok';
   static const String signOut = 'Sign Out';
   static const String allFieldsRequired = 'All Fields Required';

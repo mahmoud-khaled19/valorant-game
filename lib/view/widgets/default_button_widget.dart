@@ -8,6 +8,7 @@ class DefaultButton extends StatelessWidget {
   final double radius;
   final double height;
   final double width;
+  final double fontSize;
   final Function() function;
 
   const DefaultButton({
@@ -15,6 +16,7 @@ class DefaultButton extends StatelessWidget {
     this.height = AppSize.s50,
     this.width = double.infinity,
     this.radius = AppSize.s40,
+    this.fontSize = AppSize.s18,
     Key? key,
     required this.function,
   }) : super(key: key);
@@ -33,8 +35,7 @@ class DefaultButton extends StatelessWidget {
           child: Text(text,
               style: Theme.of(context)
                   .textTheme
-                  .titleLarge
-                  ?.copyWith(color: Colors.white))),
+                  .titleLarge?.copyWith(fontSize:fontSize ))),
     );
   }
 }

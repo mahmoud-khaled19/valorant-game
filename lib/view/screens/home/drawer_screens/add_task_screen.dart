@@ -15,14 +15,13 @@ class AddTaskScreen extends StatefulWidget {
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
   var formKey = GlobalKey<FormState>();
+  final TextEditingController categoryController = TextEditingController();
+  final TextEditingController taskTitleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController deadLineDateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController categoryController = TextEditingController();
-    final TextEditingController taskTitleController = TextEditingController();
-    final TextEditingController descriptionController = TextEditingController();
-    final TextEditingController deadLineDateController =
-        TextEditingController();
     return Scaffold(
       body: Form(
         key: formKey,
@@ -112,7 +111,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 validate: (String? value) {
                   if (value!.isEmpty) {
                     return categoryController.text = 'Choose Category';
-                  } else {}
+                  }
+                  return null;
                 },
                 label: 'Task Category',
               ),
@@ -120,7 +120,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 maxLength: 100,
                 controller: taskTitleController,
                 validate: (String? value) {
-                  return 'Task Title is Necessary';
+                  if (value!.isEmpty) {
+                    return 'Task Title is Necessary';
+                  }
+                  return null;
                 },
                 label: 'Task Title',
               ),
@@ -129,7 +132,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 maxLength: 1000,
                 controller: descriptionController,
                 validate: (String? value) {
-                  return 'Description is Necessary';
+                  if (value!.isEmpty) {
+                    return 'Task Title is Necessary';
+                  }
+                  return null;
                 },
                 label: 'Task Description',
               ),
@@ -149,7 +155,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   }
                 },
                 textType: TextInputType.number,
-                label: 'pick Up Date',
+                label: 'Dead line Date',
               ),
               const SizedBox(
                 height: 20,

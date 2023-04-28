@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../view/widgets/default_custom_text.dart';
 import 'auth_state.dart';
 
@@ -95,9 +93,10 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   File? imageFile;
+  XFile? pickedFile;
 
   pickImageWithCamera(context) async {
-    XFile? pickedFile = await ImagePicker()
+    pickedFile = await ImagePicker()
         .pickImage(source: ImageSource.camera, maxWidth: 1080, maxHeight: 1080);
 
     imageFile = File(pickedFile!.path);

@@ -173,10 +173,15 @@ class RegisterScreen extends StatelessWidget {
                             if (value!.isEmpty) {
                               return AppStrings.passwordValidateMessage;
                             } else {
-                              return null;
                             }
+                            return null;
                           },
                           label: AppStrings.labelPassword,
+                          onSubmittedFunction: (){
+                            if (formKey.currentState!.validate()) {
+                              GlobalMethods.navigateAndFinish(context, const LoginScreen());
+                            }
+                          },
                           prefixIcon: Icons.lock,
                         ),
                         const SizedBox(
@@ -190,7 +195,9 @@ class RegisterScreen extends StatelessWidget {
                           child: DefaultButton(
                               text: AppStrings.login,
                               function: () {
-                                if (formKey.currentState!.validate()) {}
+                                if (formKey.currentState!.validate()) {
+                                  GlobalMethods.navigateAndFinish(context, const LoginScreen());
+                                }
                               }),
                         ),
                         Row(

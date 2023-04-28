@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:workers/view/screens/home/tasks_details_screen/tasks_details_screen.dart';
 
+import '../../app_constance/global_methods.dart';
 import '../../app_constance/strings_manager.dart';
 
 class TaskItem extends StatelessWidget {
@@ -11,14 +13,14 @@ class TaskItem extends StatelessWidget {
       color: Theme.of(context).scaffoldBackgroundColor,
       child: ListTile(
         contentPadding:
-        const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         leading: Container(
           padding: const EdgeInsets.only(right: 12, top: 20),
           decoration: const BoxDecoration(
               border: Border(
-                right: BorderSide(
-                    width: 1, style: BorderStyle.solid, color: Colors.grey),
-              )),
+            right: BorderSide(
+                width: 1, style: BorderStyle.solid, color: Colors.grey),
+          )),
           child: const CircleAvatar(
             radius: 20,
             child: Icon(
@@ -27,12 +29,15 @@ class TaskItem extends StatelessWidget {
             ),
           ),
         ),
-        onTap: () {},
+        onTap: () {
+          GlobalMethods.navigateTo(context,  TasksDetailsScreen());
+          print('test');
+        },
         onLongPress: () {
           showOnLongPressedFunction(context);
         },
         title: Text(
-          'Title' * 2,
+          'Title' * 3,
           style: Theme.of(context).textTheme.titleMedium,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -49,8 +54,8 @@ class TaskItem extends StatelessWidget {
             )
           ],
         ),
-        trailing:  GestureDetector(
-          onTap: (){},
+        trailing: GestureDetector(
+          onTap: () {},
           child: Icon(
             Icons.keyboard_arrow_right,
             color: Theme.of(context).splashColor,

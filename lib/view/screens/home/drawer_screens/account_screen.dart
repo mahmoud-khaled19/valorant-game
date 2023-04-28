@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/app_constance/strings_manager.dart';
 import 'package:workers/view/screens/home/home_screen/home_screen.dart';
@@ -8,7 +10,7 @@ import 'package:workers/view/widgets/default_custom_text.dart';
 import '../../../../generated/assets.dart';
 
 class AccountScreen extends StatelessWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+  AccountScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class AccountScreen extends StatelessWidget {
                     },
                     child: const DefaultCustomText(
                       alignment: Alignment.centerLeft,
-                      text: 'Back',
+                      text: AppStrings.back,
                       style: TextStyle(
                           fontStyle: FontStyle.italic,
                           fontSize: 20,
@@ -86,18 +88,27 @@ class AccountScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           socialButton(
+                            function: () {
+                              openWhatsApp();
+                            },
                             context: context,
                             color: Colors.green,
                             icon: Icons.chat,
                             iconColor: Colors.green,
                           ),
                           socialButton(
+                            function: () {
+                              mailTo();
+                            },
                             context: context,
                             color: Colors.red,
                             icon: Icons.mail,
                             iconColor: Colors.red,
                           ),
                           socialButton(
+                            function: () {
+                              callPhoneNumber();
+                            },
                             context: context,
                             color: Colors.blue,
                             icon: Icons.call,
@@ -142,15 +153,34 @@ class AccountScreen extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
+    );
+  }
+
+  String phoneNumber = '+201208467330';
+  String mail = 'mahmoudacc@gmail.com';
+
+  openWhatsApp() async {
+    final Uri url = Uri.parse('https://wa.me/$phoneNumber');
+    await launchUrl(url, mode: LaunchMode.externalApplication,
+    );
+  }
+  mailTo()async{
+    final Uri url = Uri.parse('mailto:$mail');
+    await launchUrl(url, mode: LaunchMode.externalApplication);
+  }
+  callPhoneNumber() async {
+    final Uri url = Uri.parse('tel:///$phoneNumber');
+    await launchUrl(url, mode: LaunchMode.externalApplication,
     );
   }
 
   Widget socialButton({
     required context,
     required color,
+    required function,
     required icon,
     required iconColor,
   }) {
@@ -161,7 +191,7 @@ class AccountScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).canvasColor,
         radius: 24,
         child: IconButton(
-          onPressed: () {},
+          onPressed: function,
           icon: Icon(
             icon,
             color: iconColor,
