@@ -236,21 +236,8 @@ class RegisterScreen extends StatelessWidget {
                                       position: positionController.text.trim(),
                                       time: Timestamp.now(),
                                       image: '${cubit.imageFile!}',
-                                    )
-                                        .then((value) {
-                                      GlobalMethods.showSnackBar(
-                                          context,
-                                          'Email Created Successfully',
-                                          Colors.green);
-                                      GlobalMethods.navigateAndFinish(
-                                          context, const LoginScreen());
-                                    }).catchError((error){
-                                      print(error.toString());
-                                      GlobalMethods.showSnackBar(
-                                          context,
-                                          error.toString(),
-                                          Colors.green);
-                                    });
+                                    );
+
                                   }
                                   else {
                                     GlobalMethods.showSnackBar(

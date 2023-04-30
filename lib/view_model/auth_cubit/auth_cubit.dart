@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:workers/view/screens/auth/user_login_states_screen.dart';
 import '../../app_constance/global_methods.dart';
 import '../../app_constance/strings_manager.dart';
+import '../../view/screens/auth/login_screen.dart';
 import '../../view/screens/home/home_screen/home_screen.dart';
 import '../../view/widgets/default_custom_text.dart';
 import 'auth_state.dart';
@@ -59,7 +60,20 @@ class AuthCubit extends Cubit<AuthState> {
      'Password':password,
      'Position':position,
      'Created At':'$time',
-     });
+     }) .then((value) {
+       GlobalMethods.showSnackBar(
+           context,
+           'Email Created Successfully',
+           Colors.green);
+       GlobalMethods.navigateAndFinish(
+           context, const LoginScreen());
+     }).catchError((error){
+       print(error.toString());
+       GlobalMethods.showSnackBar(
+           context,
+           error.toString(),
+           Colors.green);
+     });;
       emit(RegisterWithEmailSuccessState());
     }
     catch(e){
