@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/app_constance/strings_manager.dart';
 import 'package:workers/view/screens/home/home_screen/home_screen.dart';
@@ -8,14 +8,19 @@ import 'package:workers/view/widgets/default_button_widget.dart';
 import 'package:workers/view/widgets/default_custom_text.dart';
 
 import '../../../../generated/assets.dart';
+import '../../../../view_model/auth_cubit/auth_cubit.dart';
+import '../../../../view_model/auth_cubit/auth_state.dart';
 
 class AccountScreen extends StatelessWidget {
-  AccountScreen({Key? key}) : super(key: key);
+   const AccountScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double hSize = MediaQuery.of(context).size.height;
     double wSize = MediaQuery.of(context).size.width;
+    return BlocBuilder<AuthCubit, AuthState>(
+  builder: (context, state) {
+    AuthCubit cubit =BlocProvider.of(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -125,7 +130,9 @@ class AccountScreen extends StatelessWidget {
                       DefaultButton(
                         width: wSize * 0.3,
                         text: AppStrings.logout,
-                        function: () {},
+                        function: () {
+                          cubit.signOutMethod(context);
+                        },
                       )
                     ],
                   ),
@@ -157,23 +164,31 @@ class AccountScreen extends StatelessWidget {
         ],
       ),
     );
+  },
+);
   }
 
-  String phoneNumber = '+201208467330';
-  String mail = 'mahmoudacc@gmail.com';
+  final String phoneNumber = '+201208467330';
+  final String mail = 'mahmoudacc@gmail.com';
 
   openWhatsApp() async {
     final Uri url = Uri.parse('https://wa.me/$phoneNumber');
-    await launchUrl(url, mode: LaunchMode.externalApplication,
+    await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
     );
   }
-  mailTo()async{
+
+  mailTo() async {
     final Uri url = Uri.parse('mailto:$mail');
     await launchUrl(url, mode: LaunchMode.externalApplication);
   }
+
   callPhoneNumber() async {
     final Uri url = Uri.parse('tel:///$phoneNumber');
-    await launchUrl(url, mode: LaunchMode.externalApplication,
+    await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
     );
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/app_constance/values_manager.dart';
-import 'package:workers/view/components/worker_item.dart';
 import 'package:workers/view/screens/auth/login_screen.dart';
 import 'package:workers/view/screens/home/drawer_screens/add_task_screen.dart';
 import 'package:workers/view/screens/home/drawer_screens/workers.dart';
@@ -76,7 +75,7 @@ class DrawerWidget extends StatelessWidget {
           DefaultListTile(
             title: AppStrings.logout,
             function: () {
-              signOutMethod(context);
+             // signOutMethod(context);
             },
             leadingWidget: const Icon(Icons.power_settings_new_outlined),
           ),
@@ -85,44 +84,5 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  void signOutMethod(context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Center(
-              child: Text(
-                AppStrings.signOut,
-              ),
-            ),
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: const Text(AppStrings.signOutMessage),
-            ),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: DefaultCustomText(
-                        text: AppStrings.cancel,
-                        style: Theme.of(context).textTheme.titleSmall),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      GlobalMethods.navigateAndFinish(context, const LoginScreen());
-                    },
-                    child: DefaultCustomText(
-                        text: AppStrings.ok,
-                        style: Theme.of(context).textTheme.titleSmall),
-                  ),
-                ],
-              )
-            ],
-          );
-        });
-  }
+
 }

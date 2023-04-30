@@ -1,16 +1,29 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:workers/view/screens/auth/user_login_states_screen.dart';
+import '../../app_constance/global_methods.dart';
+import '../../app_constance/strings_manager.dart';
+import '../../view/screens/home/home_screen/home_screen.dart';
 import '../../view/widgets/default_custom_text.dart';
 import 'auth_state.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(LoginInitial());
 
+  AuthCubit get(context) => BlocProvider.of(context);
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore authStore = FirebaseFirestore.instance;
+  final FirebaseStorage authStorage =FirebaseStorage.instance;
+
   bool isVisible = false;
+  File? imageFile;
+  XFile? pickedFile;
+
 
   void changePasswordVisibility() {
     isVisible = !isVisible;
@@ -20,22 +33,105 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> registerWithEmailAndPassword({
     required String email,
     required String password,
+    required String phone,
+    required String name,
+    required String image,
+    required String position,
+    required Timestamp time,
+    required BuildContext context,
   }) async {
-    emit(RegisterWithEmailLoadingState());
-    await auth.createUserWithEmailAndPassword(email: email, password: password);
-    emit(RegisterWithEmailSuccessState());
-  }
+    try{
+      final  userId = auth.currentUser?.uid;
 
-  AuthCubit get(context) => BlocProvider.of(context);
-  FirebaseAuth auth = FirebaseAuth.instance;
+      emit(RegisterWithEmailLoadingState());
+
+      await auth
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      final ref =  authStorage.ref().child('userImages').child('${userId!}+ .jpg');
+      await ref.putFile(imageFile!) ;
+      image = await ref.getDownloadURL();
+     await authStore.collection('users').add({
+     'Id':userId,
+     'Name':name,
+     'Phone':phone,
+     'Image':image,
+     'Password':password,
+     'Position':position,
+     'Created At':'$time',
+     });
+      emit(RegisterWithEmailSuccessState());
+    }
+    catch(e){
+      GlobalMethods.showSnackBar(
+          context, 'Error ${e.toString()}', Colors.red);
+      emit(RegisterWithEmailErrorState());
+    }
+
+
+  }
 
   Future<void> loginWithEmailAndPassword({
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     emit(LoginInWithEmailLoadingState());
-    await auth.signInWithEmailAndPassword(email: email, password: password);
-    emit(LoginInWithEmailSuccessState());
+    await auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      GlobalMethods.showSnackBar(context, 'Logged  Successfully', Colors.green);
+      GlobalMethods.navigateAndFinish(context, const HomeScreen());
+      emit(LoginInWithEmailSuccessState());
+    }).catchError((error) {
+      GlobalMethods.showSnackBar(
+          context, 'Error ${error.toString()}', Colors.red);
+      emit(LoginInWithEmailErrorState());
+    });
+  }
+
+  void signOutMethod(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text(
+                AppStrings.signOut,
+              ),
+            ),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.7,
+              child: const Text(AppStrings.signOutMessage),
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: DefaultCustomText(
+                        text: AppStrings.cancel,
+                        style: Theme.of(context).textTheme.titleSmall),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await auth.signOut().then((value) {
+                        GlobalMethods.navigateAndFinish(
+                            context, const UserLoginStates());
+                      });
+                    },
+                    child: DefaultCustomText(
+                        text: AppStrings.ok,
+                        style: Theme.of(context).textTheme.titleSmall),
+                  ),
+                ],
+              )
+            ],
+          );
+        });
   }
 
   void choosePhotoDialog(context) {
@@ -92,38 +188,27 @@ class AuthCubit extends Cubit<AuthState> {
         });
   }
 
-  File? imageFile;
-  XFile? pickedFile;
+  Future pickImageWithCamera(context) async {
+    try{
+      pickedFile = await ImagePicker()
+          .pickImage(source: ImageSource.camera, maxWidth: 1080, maxHeight: 1080);
 
-  pickImageWithCamera(context) async {
-    pickedFile = await ImagePicker()
-        .pickImage(source: ImageSource.camera, maxWidth: 1080, maxHeight: 1080);
+      imageFile = File(pickedFile!.path);
+      emit(ChangeImage());
+      Navigator.pop(context);
+    }
+    catch(e){
+      print(e.toString());
+      GlobalMethods.showSnackBar(context, e.toString(), Colors.blue);
+    }
 
-    imageFile = File(pickedFile!.path);
-    // cropImage(context, pickedFile!.path);
-
-    emit(ChangeImage());
-    Navigator.pop(context);
   }
 
   pickImageWithGallery(context) async {
     XFile? pickedFile = await ImagePicker().pickImage(
         source: ImageSource.gallery, maxWidth: 1080, maxHeight: 1080);
     imageFile = File(pickedFile!.path);
-    // cropImage(context, pickedFile!.path);
     Navigator.pop(context);
     emit(ChangeImage());
-  }
-
-  CroppedFile? croppedFile;
-
-  Future cropImage(context, imagePath) async {
-    croppedFile = await ImageCropper().cropImage(
-      sourcePath: imagePath,
-    );
-    if (croppedFile != null) {
-      imageFile = croppedFile as File;
-      emit(ChangeImage());
-    }
   }
 }

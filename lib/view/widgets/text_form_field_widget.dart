@@ -25,18 +25,17 @@ class DefaultTextFormField extends StatelessWidget {
     this.onSubmittedFunction,
     this.maxLength,
     this.enabled,
-    this.maxLines,
+    this.maxLines =1,
     required this.controller,
     required this.validate,
     required this.label,
     this.prefixIcon,
     this.function,
-    this.focusNode,
     this.suffixIcon,
     this.suffixFunction,
     this.isSecure = false,
     this.textType = TextInputType.emailAddress,
-    this.textTypeAction = TextInputAction.next,
+    this.textTypeAction = TextInputAction.done, this.focusNode,
   });
 
   @override
@@ -53,7 +52,6 @@ class DefaultTextFormField extends StatelessWidget {
             maxLength: maxLength,
             maxLines: maxLines,
             onEditingComplete: onSubmittedFunction,
-            focusNode: focusNode,
             textInputAction: textTypeAction,
             style: Theme.of(context).textTheme.titleMedium,
             obscureText: isSecure,

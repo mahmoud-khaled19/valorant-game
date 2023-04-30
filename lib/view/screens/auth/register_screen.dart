@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/app_constance/global_methods.dart';
@@ -23,7 +24,6 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     double size = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (context) => AuthCubit(),
@@ -85,12 +85,10 @@ class RegisterScreen extends StatelessWidget {
                                 alignment: Alignment.topRight,
                                 children: [
                                   Container(
-                                    height:
-                                        MediaQuery.of(context).size.height *
-                                            0.12,
-                                    width:
-                                        MediaQuery.of(context).size.height *
-                                            0.12,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.12,
+                                    width: MediaQuery.of(context).size.height *
+                                        0.12,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: Colors.white,
@@ -99,7 +97,9 @@ class RegisterScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(20),
                                       child: cubit.imageFile == null
                                           ? CachedNetworkImage(
-                                               imageUrl: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',)
+                                              imageUrl:
+                                                  'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
+                                            )
                                           : Image.file(
                                               cubit.imageFile!,
                                               fit: BoxFit.fill,
@@ -172,14 +172,41 @@ class RegisterScreen extends StatelessWidget {
                           validate: (String? value) {
                             if (value!.isEmpty) {
                               return AppStrings.passwordValidateMessage;
-                            } else {
-                            }
+                            } else {}
                             return null;
                           },
                           label: AppStrings.labelPassword,
-                          onSubmittedFunction: (){
+                          onSubmittedFunction: () {
                             if (formKey.currentState!.validate()) {
-                              GlobalMethods.navigateAndFinish(context, const LoginScreen());
+                              if (cubit.imageFile != null) {
+                                cubit
+                                    .registerWithEmailAndPassword(
+                                  context: context,
+                                  email: emailController.text
+                                      .toLowerCase()
+                                      .trim(),
+                                  password: passwordController.text.trim(),
+                                  phone: phoneController.text.trim(),
+                                  name: nameController.text.trim(),
+                                  position: positionController.text.trim(),
+                                  time: Timestamp.now(),
+                                  image: '${cubit.imageFile!}',
+                                )
+                                    .then((value) {
+                                  GlobalMethods.showSnackBar(
+                                      context,
+                                      'Email Created Successfully',
+                                      Colors.green);
+                                  GlobalMethods.navigateAndFinish(
+                                      context, const LoginScreen());
+                                });
+                              }
+                              else {
+                                GlobalMethods.showSnackBar(
+                                    context,
+                                    'Choose Image Before Register',
+                                    Colors.red);
+                              }
                             }
                           },
                           prefixIcon: Icons.lock,
@@ -188,7 +215,7 @@ class RegisterScreen extends StatelessWidget {
                           height: AppSize.s20,
                         ),
                         Visibility(
-                          visible: state is! LoginInWithEmailLoadingState,
+                          visible: state is! RegisterWithEmailLoadingState,
                           replacement: const Center(
                             child: CircularProgressIndicator(),
                           ),
@@ -196,7 +223,44 @@ class RegisterScreen extends StatelessWidget {
                               text: AppStrings.login,
                               function: () {
                                 if (formKey.currentState!.validate()) {
-                                  GlobalMethods.navigateAndFinish(context, const LoginScreen());
+                                  if (cubit.imageFile != null) {
+                                    cubit
+                                        .registerWithEmailAndPassword(
+                                      context: context,
+                                      email: emailController.text
+                                          .toLowerCase()
+                                          .trim(),
+                                      password: passwordController.text.trim(),
+                                      phone: phoneController.text.trim(),
+                                      name: nameController.text.trim(),
+                                      position: positionController.text.trim(),
+                                      time: Timestamp.now(),
+                                      image: '${cubit.imageFile!}',
+                                    )
+                                        .then((value) {
+                                      GlobalMethods.showSnackBar(
+                                          context,
+                                          'Email Created Successfully',
+                                          Colors.green);
+                                      GlobalMethods.navigateAndFinish(
+                                          context, const LoginScreen());
+                                    }).catchError((error){
+                                      print(error.toString());
+                                      GlobalMethods.showSnackBar(
+                                          context,
+                                          error.toString(),
+                                          Colors.green);
+                                    });
+                                  }
+                                  else {
+                                    GlobalMethods.showSnackBar(
+                                        context,
+                                        'Choose Image Before Register',
+                                        Colors.red);
+                                  }
+                                }
+                                else{
+                                  return;
                                 }
                               }),
                         ),
@@ -290,5 +354,4 @@ class RegisterScreen extends StatelessWidget {
           );
         });
   }
-
 }

@@ -12,7 +12,7 @@ class GlobalMethods {
 
   static showSnackBar(BuildContext context, String text, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 5),
       backgroundColor: color,
       content: Text(text),
     ));
