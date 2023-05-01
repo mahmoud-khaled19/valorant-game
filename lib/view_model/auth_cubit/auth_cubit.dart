@@ -19,12 +19,11 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit get(context) => BlocProvider.of(context);
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore authStore = FirebaseFirestore.instance;
-  final FirebaseStorage authStorage =FirebaseStorage.instance;
+  final FirebaseStorage authStorage = FirebaseStorage.instance;
 
   bool isVisible = false;
   File? imageFile;
   XFile? pickedFile;
-
 
   void changePasswordVisibility() {
     isVisible = !isVisible;
@@ -41,48 +40,77 @@ class AuthCubit extends Cubit<AuthState> {
     required Timestamp time,
     required BuildContext context,
   }) async {
-    try{
-      final  userId = auth.currentUser?.uid;
+    try {
+      final userId = auth.currentUser?.uid;
 
       emit(RegisterWithEmailLoadingState());
 
-      await auth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
 
-      final ref =  authStorage.ref().child('userImages').child('${userId!}+ .jpg');
-      await ref.putFile(imageFile!) ;
+      final ref =
+          authStorage.ref().child('userImages').child('${userId!}+ .jpg');
+      await ref.putFile(imageFile!);
       image = await ref.getDownloadURL();
-     await authStore.collection('users').add({
-     'Id':userId,
-     'Name':name,
-     'Phone':phone,
-     'Image':image,
-     'Password':password,
-     'Position':position,
-     'Created At':'$time',
-     }) .then((value) {
-       GlobalMethods.showSnackBar(
-           context,
-           'Email Created Successfully',
-           Colors.green);
-       GlobalMethods.navigateAndFinish(
-           context, const LoginScreen());
-     }).catchError((error){
-       print(error.toString());
-       GlobalMethods.showSnackBar(
-           context,
-           error.toString(),
-           Colors.green);
-     });;
+      await authStore.collection('users').doc(userId).set({
+        'id': userId,
+        'name': name,
+        'phone': phone,
+        'image': image,
+        'password': password,
+        'position': position,
+        'joined At': '$time',
+        'email': email,
+      }).then((value) {
+        GlobalMethods.showSnackBar(
+            context, 'Email Created Successfully', Colors.green);
+        GlobalMethods.navigateAndFinish(context, const LoginScreen());
+      }).catchError((error) {
+        print(error.toString());
+        GlobalMethods.showSnackBar(context, error.toString(), Colors.green);
+      });
       emit(RegisterWithEmailSuccessState());
-    }
-    catch(e){
-      GlobalMethods.showSnackBar(
-          context, 'Error ${e.toString()}', Colors.red);
+    } catch (e) {
+      GlobalMethods.showSnackBar(context, 'Error ${e.toString()}', Colors.red);
       emit(RegisterWithEmailErrorState());
     }
+  }
 
+  String? name;
+  String? phone;
+  String? email;
+  String? imageUrl;
+  String? position;
+  String? joinedAt;
+  bool? isSameUser;
 
+  Future getUserData(
+    BuildContext context,
+  ) async {
+    final userId = auth.currentUser!.uid;
+    print(userId);
+    emit(GetUserDataLoadingState());
+    try {
+      final DocumentSnapshot userDoc =
+          await authStore.collection('users').doc(userId).get();
+      if (userDoc == null) {
+        print('UserDoc Is Null');
+        return;
+      } else {
+        email = userDoc.get('email');
+        name = userDoc.get('name');
+        phone = userDoc.get('phone');
+        imageUrl = userDoc.get('image');
+        position = userDoc.get('position');
+        // Timestamp joinedAtStamp = userDoc.get('joined At');
+        // var joinedDate = joinedAtStamp.toDate();
+        // joinedAt = '${joinedDate.year}-${joinedDate.month}-${joinedDate.day}';
+      }
+      emit(GetUserDataSuccessState());
+    } catch (e) {
+      print(e.toString());
+      GlobalMethods.showSnackBar(context, e.toString(), Colors.red);
+    }
   }
 
   Future<void> loginWithEmailAndPassword({
@@ -203,26 +231,30 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future pickImageWithCamera(context) async {
-    try{
-      pickedFile = await ImagePicker()
-          .pickImage(source: ImageSource.camera, maxWidth: 1080, maxHeight: 1080);
+    try {
+      pickedFile = await ImagePicker().pickImage(
+          source: ImageSource.camera, maxWidth: 1080, maxHeight: 1080);
 
       imageFile = File(pickedFile!.path);
       emit(ChangeImage());
       Navigator.pop(context);
-    }
-    catch(e){
+    } catch (e) {
       print(e.toString());
       GlobalMethods.showSnackBar(context, e.toString(), Colors.blue);
     }
-
   }
 
   pickImageWithGallery(context) async {
-    XFile? pickedFile = await ImagePicker().pickImage(
-        source: ImageSource.gallery, maxWidth: 1080, maxHeight: 1080);
-    imageFile = File(pickedFile!.path);
-    Navigator.pop(context);
-    emit(ChangeImage());
+    try {
+      XFile? pickedFile = await ImagePicker().pickImage(
+          source: ImageSource.gallery, maxWidth: 1080, maxHeight: 1080);
+      imageFile = File(pickedFile!.path);
+      Navigator.pop(context);
+      emit(ChangeImage());
+    } catch (e) {
+      print(e.toString());
+      GlobalMethods.showSnackBar(context, e.toString(), Colors.blue);
+
+    }
   }
 }

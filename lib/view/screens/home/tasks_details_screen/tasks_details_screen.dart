@@ -1,25 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:workers/app_constance/values_manager.dart';
-import 'package:workers/view/components/comments_item.dart';
-import 'package:workers/view/widgets/default_button_widget.dart';
-import 'package:workers/view/widgets/text_form_field_widget.dart';
-
-import '../../../../app_constance/global_methods.dart';
+import 'package:workers/view/components_items//comments_item.dart';
 import '../../../../app_constance/strings_manager.dart';
 import '../../../../generated/assets.dart';
 import '../../../widgets/default_custom_text.dart';
-import '../home_screen/home_screen.dart';
 
-class TasksDetailsScreen extends StatefulWidget {
-  const TasksDetailsScreen({Key? key}) : super(key: key);
-
-  @override
-  State<TasksDetailsScreen> createState() => _TasksDetailsScreenState();
-}
-
-class _TasksDetailsScreenState extends State<TasksDetailsScreen> {
-  final TextEditingController commentController = TextEditingController();
-
+class TasksDetailsScreen extends StatelessWidget {
+   TasksDetailsScreen({Key? key}) : super(key: key);
   final formKey = GlobalKey<FormState>();
 
   bool isCommenting = false;
@@ -34,13 +20,13 @@ class _TasksDetailsScreenState extends State<TasksDetailsScreen> {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10, top: 50),
-              child: GestureDetector(
-                onTap: () {
-                  GlobalMethods.navigateTo(context, const HomeScreen());
-                },
-                child: const DefaultCustomText(
+            GestureDetector(
+              onTap: (){
+                Navigator.pop(context);
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(left: 10, top: 50),
+                child: DefaultCustomText(
                   alignment: Alignment.centerLeft,
                   text: AppStrings.back,
                   style: TextStyle(
@@ -50,15 +36,11 @@ class _TasksDetailsScreenState extends State<TasksDetailsScreen> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: AppSize.s25,
-            ),
+            SizedBox(height: hSize * 0.1),
             DefaultCustomText(
                 text: AppStrings.tasks,
                 style: Theme.of(context).textTheme.headlineLarge),
-            const SizedBox(
-              height: AppSize.s16,
-            ),
+            SizedBox(height: hSize * 0.02),
             Form(
               key: formKey,
               child: Container(
@@ -76,27 +58,23 @@ class _TasksDetailsScreenState extends State<TasksDetailsScreen> {
                             text: 'Uploaded By',
                             style: Theme.of(context).textTheme.titleSmall),
                         const Spacer(),
-                        Positioned(
-                          top: 100,
-                          right: MediaQuery.of(context).size.width * 0.35,
-                          child: Row(
-                            children: [
-                              Stack(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                    radius: 30,
-                                    child: const CircleAvatar(
-                                      backgroundImage:
-                                          AssetImage(Assets.imagesChild),
-                                      radius: 27,
-                                    ),
+                        Row(
+                          children: [
+                            Stack(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                                  radius: 30,
+                                  child: const CircleAvatar(
+                                    backgroundImage:
+                                    AssetImage(Assets.imagesChild),
+                                    radius: 27,
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                         Column(
                           children: [
@@ -112,8 +90,8 @@ class _TasksDetailsScreenState extends State<TasksDetailsScreen> {
                                     .textTheme
                                     .titleSmall
                                     ?.copyWith(
-                                        fontSize: 12,
-                                        color: Colors.grey.shade200)),
+                                    fontSize: 12,
+                                    color: Colors.grey.shade200)),
                           ],
                         )
                       ],
@@ -200,73 +178,7 @@ class _TasksDetailsScreenState extends State<TasksDetailsScreen> {
                         alignment: Alignment.centerLeft,
                         text: 'description ',
                         style: Theme.of(context).textTheme.titleSmall),
-                    AnimatedSwitcher(
-                      duration: const Duration(seconds: 1),
-                      child: isCommenting == false
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: wSize * 0.2,
-                                vertical: hSize * 0.03,
-                              ),
-                              child: DefaultButton(
-                                text: 'Add Comment',
-                                function: () {
-                                  setState(() {
-                                    isCommenting = !isCommenting;
-                                  });
-                                },
-                              ),
-                            )
-                          : Row(
-                              children: [
-                                Flexible(
-                                  flex: 3,
-                                  child: DefaultTextFormField(
-                                    maxLines: 4,
-                                    maxLength: 200,
-                                    controller: commentController,
-                                    validate: (String? value) {
-                                      if (value!.isEmpty) {
-                                        return 'Insert your Comment';
-                                      }
-                                      return null;
-                                    },
-                                    label: 'Comment',
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Flexible(
-                                  child: Column(
-                                    children: [
-                                      DefaultButton(
-                                          text: 'Post',
-                                          fontSize: 14,
-                                          function: () {
-                                            if (formKey.currentState!
-                                                .validate()) {
-                                            } else {
-                                              return null;
-                                            }
-                                          }),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      DefaultButton(
-                                          text: AppStrings.cancel,
-                                          fontSize: 14,
-                                          function: () {
-                                            setState(() {
-                                              isCommenting = !isCommenting;
-                                            });
-                                          }),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                    ),
+
                     ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -274,7 +186,9 @@ class _TasksDetailsScreenState extends State<TasksDetailsScreen> {
                         return const CommentsList();
                       },
                       separatorBuilder: (context, index) {
-                        return const Divider();
+                        return const Divider(
+                          thickness: 2,
+                        );
                       },
                       itemCount: 20,
                     ),
@@ -282,9 +196,11 @@ class _TasksDetailsScreenState extends State<TasksDetailsScreen> {
                 ),
               ),
             ),
+            SizedBox(height: hSize * 0.01),
           ],
         ),
       ),
     );
   }
+
 }

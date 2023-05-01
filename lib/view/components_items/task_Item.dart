@@ -30,7 +30,7 @@ class TaskItem extends StatelessWidget {
           ),
         ),
         onTap: () {
-          GlobalMethods.navigateTo(context,  TasksDetailsScreen());
+          GlobalMethods.navigateTo(context,   TasksDetailsScreen());
           print('test');
         },
         onLongPress: () {

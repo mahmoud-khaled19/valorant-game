@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/app_constance/strings_manager.dart';
 
-import '../../../components/worker_item.dart';
+import '../../../components_items//worker_item.dart';
 import '../../../widgets/drawer_widget.dart';
 
 

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/app_constance/values_manager.dart';
-import 'package:workers/view/screens/auth/login_screen.dart';
 import 'package:workers/view/screens/home/drawer_screens/add_task_screen.dart';
 import 'package:workers/view/screens/home/drawer_screens/workers.dart';
 
 import '../../app_constance/strings_manager.dart';
 import '../../generated/assets.dart';
+import '../../view_model/auth_cubit/auth_cubit.dart';
+import '../../view_model/auth_cubit/auth_state.dart';
 import '../screens/home/drawer_screens/account_screen.dart';
 import 'default_custom_text.dart';
 import 'default_list_tile.dart';
@@ -16,6 +18,9 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthCubit cubit =BlocProvider.of(context);
+    return BlocBuilder<AuthCubit, AuthState>(
+  builder: (context, state) {
     return Drawer(
       child: Column(
         children: [
@@ -51,7 +56,7 @@ class DrawerWidget extends StatelessWidget {
           DefaultListTile(
             title: AppStrings.account,
             function: () {
-              GlobalMethods.navigateAndFinish(context, AccountScreen());
+              GlobalMethods.navigateTo(context, AccountScreen());
             },
             leadingWidget: const Icon(Icons.account_circle_sharp),
           ),
@@ -75,13 +80,15 @@ class DrawerWidget extends StatelessWidget {
           DefaultListTile(
             title: AppStrings.logout,
             function: () {
-             // signOutMethod(context);
+              cubit.signOutMethod(context);
             },
             leadingWidget: const Icon(Icons.power_settings_new_outlined),
           ),
         ],
       ),
     );
+  },
+);
   }
 
 

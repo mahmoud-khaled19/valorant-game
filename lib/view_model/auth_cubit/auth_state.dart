@@ -22,8 +22,8 @@ class LoginInWithEmailSuccessState extends AuthState {}
 
 class LoginInWithEmailErrorState extends AuthState {}
 
-class LoginInWithGmailLoadingState extends AuthState {}
+class GetUserDataLoadingState extends AuthState {}
 
-class LoginInWithGmailSuccessState extends AuthState {}
+class GetUserDataSuccessState extends AuthState {}
 
-class LoginInWithGmailErrorState extends AuthState {}
+class GetUserDataErrorState extends AuthState {}
