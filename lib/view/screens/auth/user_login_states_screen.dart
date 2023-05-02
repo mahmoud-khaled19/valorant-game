@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/generated/assets.dart';
@@ -23,9 +25,11 @@ class UserLoginStates extends StatelessWidget {
                 return const LoginScreen();
               }
               else if (userSnapshot.hasData) {
+                print(FirebaseAuth.instance.currentUser!.email);
                 return const HomeScreen();
               }
               else if (userSnapshot.hasError) {
+
                 return const EmptyScreen(
                     text: 'Oops ! Check Internet Connection ',
                     image: Assets.imagesNoNews);

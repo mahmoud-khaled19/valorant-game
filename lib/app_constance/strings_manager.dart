@@ -8,6 +8,7 @@ class AppStrings {
   static const String companyWorkers = 'Company Workers';
   static const String login = 'Login';
   static const String register = 'Register';
+  static const String uploadedBy = 'Uploaded By';
   static const String delete = 'Delete';
   static const String registerMessage = 'Register Now to Be Part of Us';
   static const String forgetPassword = 'Forgot your password ?';

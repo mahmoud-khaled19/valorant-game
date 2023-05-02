@@ -41,37 +41,39 @@ class AuthCubit extends Cubit<AuthState> {
     required BuildContext context,
   }) async {
     try {
-      final userId = auth.currentUser?.uid;
-
       emit(RegisterWithEmailLoadingState());
 
-      await auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-
-      final ref =
-          authStorage.ref().child('userImages').child('${userId!}+ .jpg');
-      await ref.putFile(imageFile!);
-      image = await ref.getDownloadURL();
-      await authStore.collection('users').doc(userId).set({
-        'id': userId,
-        'name': name,
-        'phone': phone,
-        'image': image,
-        'password': password,
-        'position': position,
-        'joined At': '$time',
-        'email': email,
-      }).then((value) {
+      await auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) async {
+        final userId = auth.currentUser?.uid;
         GlobalMethods.showSnackBar(
             context, 'Email Created Successfully', Colors.green);
-        GlobalMethods.navigateAndFinish(context, const LoginScreen());
-      }).catchError((error) {
-        print(error.toString());
-        GlobalMethods.showSnackBar(context, error.toString(), Colors.green);
+        final ref =
+            authStorage.ref().child('user Images').child('$userId+ .jpg');
+        await ref.putFile(imageFile!);
+        image = await ref.getDownloadURL();
+        await authStore.collection('users').doc(userId).set({
+          'id': userId,
+          'name': name,
+          'phone': phone,
+          'image': image,
+          'password': password,
+          'position': position,
+          // 'joined At': '$time',
+          'email': email,
+        }).then((value) {
+          GlobalMethods.navigateAndFinish(context, const LoginScreen());
+        }).catchError((error) {
+          print('Error in upload user data  ${error.toString()}');
+          GlobalMethods.showSnackBar(context, error.toString(), Colors.red);
+        });
+        emit(RegisterWithEmailSuccessState());
       });
-      emit(RegisterWithEmailSuccessState());
     } catch (e) {
-      GlobalMethods.showSnackBar(context, 'Error ${e.toString()}', Colors.red);
+      print(e.toString());
+      GlobalMethods.showSnackBar(
+          context, 'Error in Register ${e.toString()}', Colors.red);
       emit(RegisterWithEmailErrorState());
     }
   }
@@ -81,7 +83,8 @@ class AuthCubit extends Cubit<AuthState> {
   String? email;
   String? imageUrl;
   String? position;
-  String? joinedAt;
+
+  // String? joinedAt;
   bool? isSameUser;
 
   Future getUserData(
@@ -254,7 +257,6 @@ class AuthCubit extends Cubit<AuthState> {
     } catch (e) {
       print(e.toString());
       GlobalMethods.showSnackBar(context, e.toString(), Colors.blue);
-
     }
   }
 }

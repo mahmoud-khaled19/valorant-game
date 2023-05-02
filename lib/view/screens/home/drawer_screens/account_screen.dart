@@ -13,17 +13,27 @@ import '../../../../view_model/auth_cubit/auth_cubit.dart';
 import '../../../../view_model/auth_cubit/auth_state.dart';
 
 class AccountScreen extends StatelessWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+   AccountScreen({
+    Key? key,
+    this.email= 'mahmoudacc.97@gmail.com',
+    this.name = 'Developer',
+    this.position = 'Mobile Developer',
+    this.image  = Assets.imagesChild,
+    this.phone= '0581077302',
+    this.userId= '',
+  }) : super(key: key);
+   String name ;
+   String phone ;
+   String email  ;
+   String position ;
+   String image ;
+   String userId ;
 
   @override
   Widget build(BuildContext context) {
     double hSize = MediaQuery.of(context).size.height;
     double wSize = MediaQuery.of(context).size.width;
-    String name = 'Developer';
-    String phone = '0581077302';
-    String email = 'mahmoudacc.97@gmail.com';
-    String position = 'Mobile Developer';
-    String image = Assets.imagesChild;
+
     return BlocProvider(
       create: (context) => AuthCubit()..getUserData(context),
       child: BlocBuilder<AuthCubit, AuthState>(
