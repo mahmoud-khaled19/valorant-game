@@ -85,7 +85,7 @@ class AuthCubit extends Cubit<AuthState> {
   String? position;
 
   // String? joinedAt;
-  bool? isSameUser;
+  String? id;
 
   Future getUserData(
     BuildContext context,
@@ -105,6 +105,7 @@ class AuthCubit extends Cubit<AuthState> {
         phone = userDoc.get('phone');
         imageUrl = userDoc.get('image');
         position = userDoc.get('position');
+        id = userDoc.get('id');
         // Timestamp joinedAtStamp = userDoc.get('joined At');
         // var joinedDate = joinedAtStamp.toDate();
         // joinedAt = '${joinedDate.year}-${joinedDate.month}-${joinedDate.day}';

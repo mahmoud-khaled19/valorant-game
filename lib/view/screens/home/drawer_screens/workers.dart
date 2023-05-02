@@ -37,16 +37,14 @@ class WorkersScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      GlobalMethods.navigateTo(
-                          context,
-                          AccountScreen(
-                            image: snapShot.data!.docs[index]['image'],
-                            phone: snapShot.data!.docs[index]['phone'],
-                            name: snapShot.data!.docs[index]['name'],
-                            position: snapShot.data!.docs[index]['position'],
-                            userId: snapShot.data!.docs[index]['id'],
-                            email: snapShot.data!.docs[index]['email'],
-                          ));
+                      GlobalMethods.navigateTo(context,  AccountScreen(
+                        image: snapShot.data!.docs[index]['image'],
+                        phone: snapShot.data!.docs[index]['phone'],
+                        name: snapShot.data!.docs[index]['name'],
+                        position: snapShot.data!.docs[index]['position'],
+                        userId: snapShot.data!.docs[index]['id'],
+                        email: snapShot.data!.docs[index]['email'],
+                      ));
                     },
                     child: WorkerItem(
                       image: snapShot.data!.docs[index]['image'],

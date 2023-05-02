@@ -13,22 +13,23 @@ import '../../../../view_model/auth_cubit/auth_cubit.dart';
 import '../../../../view_model/auth_cubit/auth_state.dart';
 
 class AccountScreen extends StatelessWidget {
-   AccountScreen({
+  const AccountScreen({
     Key? key,
-    this.email= 'mahmoudacc.97@gmail.com',
-    this.name = 'Developer',
-    this.position = 'Mobile Developer',
-    this.image  = Assets.imagesChild,
-    this.phone= '0581077302',
-    this.userId= '',
+    this.email,
+    this.name,
+    this.image,
+    this.phone,
+    this.position,
+    this.userId,
+    this.isSameUser,
   }) : super(key: key);
-   String name ;
-   String phone ;
-   String email  ;
-   String position ;
-   String image ;
-   String userId ;
-
+  final String? name;
+  final String? phone;
+  final String? email;
+  final String? position;
+  final String? image;
+  final String? userId;
+  final bool? isSameUser ;
   @override
   Widget build(BuildContext context) {
     double hSize = MediaQuery.of(context).size.height;
@@ -80,14 +81,14 @@ class AccountScreen extends StatelessWidget {
                                 height: hSize * 0.12,
                               ),
                               DefaultCustomText(
-                                text: cubit.name ?? name,
+                                text: name ?? cubit.name!,
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
                               DefaultCustomText(
-                                text: cubit.position ?? position,
+                                text: position ?? cubit.position!,
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall
@@ -107,45 +108,46 @@ class AccountScreen extends StatelessWidget {
                                 height: 5,
                               ),
                               socialInfo(context, AppStrings.labelEmail,
-                                  cubit.email ?? email),
+                                  email ?? cubit.email),
                               socialInfo(context, AppStrings.labelPhone,
-                                  cubit.phone ?? phone),
+                                  phone ?? cubit.phone),
                               const SizedBox(
                                 height: 20,
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  socialButton(
-                                    function: () {
-                                      openWhatsApp(cubit.phone ?? phone);
-                                    },
-                                    context: context,
-                                    color: Colors.green,
-                                    icon: Icons.chat,
-                                    iconColor: Colors.green,
-                                  ),
-                                  socialButton(
-                                    function: () {
-                                      mailTo(cubit.email ?? email);
-                                    },
-                                    context: context,
-                                    color: Colors.red,
-                                    icon: Icons.mail,
-                                    iconColor: Colors.red,
-                                  ),
-                                  socialButton(
-                                    function: () {
-                                      callPhoneNumber(cubit.phone ?? phone);
-                                    },
-                                    context: context,
-                                    color: Colors.blue,
-                                    icon: Icons.call,
-                                    iconColor: Colors.blue,
-                                  ),
-                                ],
-                              ),
+                              if (userId != cubit.id! && isSameUser == false)
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    socialButton(
+                                      function: () {
+                                        openWhatsApp(phone ?? cubit.phone!);
+                                      },
+                                      context: context,
+                                      color: Colors.green,
+                                      icon: Icons.chat,
+                                      iconColor: Colors.green,
+                                    ),
+                                    socialButton(
+                                      function: () {
+                                        mailTo(email ?? cubit.email!);
+                                      },
+                                      context: context,
+                                      color: Colors.red,
+                                      icon: Icons.mail,
+                                      iconColor: Colors.red,
+                                    ),
+                                    socialButton(
+                                      function: () {
+                                        callPhoneNumber(phone ?? cubit.phone!);
+                                      },
+                                      context: context,
+                                      color: Colors.blue,
+                                      icon: Icons.call,
+                                      iconColor: Colors.blue,
+                                    ),
+                                  ],
+                                ),
                               const Divider(
                                 thickness: 2,
                               ),
@@ -181,7 +183,7 @@ class AccountScreen extends StatelessWidget {
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                      cubit.imageUrl ?? image,
+                                      image ?? cubit.imageUrl!,
                                     ))),
                               ),
                             ),
