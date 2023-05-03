@@ -28,17 +28,15 @@ class CommentsList extends StatelessWidget {
         maxLines: 1,
         style: Theme.of(context).textTheme.titleMedium,
       ),
-      subtitle: Flexible(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Text(
-            'Comment',
-            maxLines: 4,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(color: Colors.grey.shade400),
-          ),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Text(
+          'Comment',
+          maxLines: 4,
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall
+              ?.copyWith(color: Colors.grey.shade400),
         ),
       ),
     );

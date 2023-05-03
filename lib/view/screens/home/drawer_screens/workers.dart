@@ -35,24 +35,26 @@ class WorkersScreen extends StatelessWidget {
               body: ListView.separated(
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
+                  final data = snapShot.data!.docs[index];
                   return GestureDetector(
                     onTap: () {
                       GlobalMethods.navigateTo(context,  AccountScreen(
-                        image: snapShot.data!.docs[index]['image'],
-                        phone: snapShot.data!.docs[index]['phone'],
-                        name: snapShot.data!.docs[index]['name'],
-                        position: snapShot.data!.docs[index]['position'],
-                        userId: snapShot.data!.docs[index]['id'],
-                        email: snapShot.data!.docs[index]['email'],
+                        image: data['image'],
+                        phone: data['phone'],
+                        name: data['name'],
+                        position: data['position'],
+                        userId: data['id'],
+                        email: data['email'],
+                        isSameUser: false,
                       ));
                     },
                     child: WorkerItem(
-                      image: snapShot.data!.docs[index]['image'],
-                      phone: snapShot.data!.docs[index]['phone'],
-                      name: snapShot.data!.docs[index]['name'],
-                      position: snapShot.data!.docs[index]['position'],
-                      userId: snapShot.data!.docs[index]['id'],
-                      email: snapShot.data!.docs[index]['email'],
+                      image: data['image'],
+                      phone: data['phone'],
+                      name: data['name'],
+                      position: data['position'],
+                      userId: data['id'],
+                      email: data['email'],
                     ),
                   );
                 },
@@ -72,11 +74,11 @@ class WorkersScreen extends StatelessWidget {
         }
         if (snapShot.hasError) {
           return const EmptyScreen(
-              text: 'Oops ! Error Happened ', image: Assets.imagesNoNews);
+              text: AppStrings.errorMessage, image: Assets.imagesNoNews);
         }
         return const Center(
           child: EmptyScreen(
-              text: 'Oops ! Error Happened ', image: Assets.imagesNoNews),
+              text: AppStrings.errorMessage, image: Assets.imagesNoNews),
         );
       },
     );

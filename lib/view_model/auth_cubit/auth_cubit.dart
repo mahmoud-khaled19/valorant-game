@@ -127,7 +127,7 @@ class AuthCubit extends Cubit<AuthState> {
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
       GlobalMethods.showSnackBar(context, 'Logged  Successfully', Colors.green);
-      GlobalMethods.navigateAndFinish(context, const HomeScreen());
+      GlobalMethods.navigateAndFinish(context,  HomeScreen());
       emit(LoginInWithEmailSuccessState());
     }).catchError((error) {
       GlobalMethods.showSnackBar(

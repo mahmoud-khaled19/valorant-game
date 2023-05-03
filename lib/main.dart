@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/view/screens/auth/user_login_states_screen.dart';
 import 'package:workers/view_model/auth_cubit/auth_cubit.dart';
+import 'package:workers/view_model/main_app_cubit/main_app_cubit.dart';
 import 'app_constance/strings_manager.dart';
 import 'app_constance/theme_manager.dart';
 import 'firebase_options.dart';
@@ -21,8 +22,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthCubit(),
+        ),
+        BlocProvider(
+          create: (context) => MainAppCubit(),
+        ),
+      ],
       child: MaterialApp(
 
         debugShowCheckedModeBanner: false,

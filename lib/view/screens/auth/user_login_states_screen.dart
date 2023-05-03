@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workers/app_constance/strings_manager.dart';
 import 'package:workers/generated/assets.dart';
 import 'package:workers/view/screens/auth/login_screen.dart';
 import 'package:workers/view/screens/home/home_screen/home_screen.dart';
@@ -26,12 +27,12 @@ class UserLoginStates extends StatelessWidget {
               }
               else if (userSnapshot.hasData) {
                 print(FirebaseAuth.instance.currentUser!.email);
-                return const HomeScreen();
+                return  HomeScreen();
               }
               else if (userSnapshot.hasError) {
 
                 return const EmptyScreen(
-                    text: 'Oops ! Check Internet Connection ',
+                    text: AppStrings.errorMessage,
                     image: Assets.imagesNoNews);
               }
               return const Scaffold(

@@ -29,7 +29,8 @@ class AccountScreen extends StatelessWidget {
   final String? position;
   final String? image;
   final String? userId;
-  final bool? isSameUser ;
+  final bool? isSameUser;
+
   @override
   Widget build(BuildContext context) {
     double hSize = MediaQuery.of(context).size.height;
@@ -53,7 +54,7 @@ class AccountScreen extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () {
                               GlobalMethods.navigateTo(
-                                  context, const HomeScreen());
+                                  context,  HomeScreen());
                             },
                             child: const DefaultCustomText(
                               alignment: Alignment.centerLeft,
@@ -114,7 +115,7 @@ class AccountScreen extends StatelessWidget {
                               const SizedBox(
                                 height: 20,
                               ),
-                              if (userId != cubit.id! && isSameUser == false)
+                              if (userId != cubit.id! && isSameUser != true)
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,

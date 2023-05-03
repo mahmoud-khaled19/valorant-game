@@ -70,7 +70,7 @@ class DrawerWidget extends StatelessWidget {
           DefaultListTile(
             title: AppStrings.addTask,
             function: () {
-              GlobalMethods.navigateTo(context, const AddTaskScreen());
+              GlobalMethods.navigateTo(context, AddTaskScreen());
             },
             leadingWidget: const Icon(Icons.add_task),
           ),
