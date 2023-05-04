@@ -24,7 +24,7 @@ class WorkersScreen extends StatelessWidget {
         } else if (snapShot.connectionState == ConnectionState.active) {
           if (snapShot.data!.docs.isNotEmpty) {
             return Scaffold(
-              drawer: const DrawerWidget(),
+              drawer:  DrawerWidget(),
               appBar: AppBar(
                 centerTitle: true,
                 title: Text(

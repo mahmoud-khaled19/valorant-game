@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
       builder: (context, state) {
         MainAppCubit cubit = BlocProvider.of(context);
         return Scaffold(
-          drawer: const DrawerWidget(),
+          drawer:  const DrawerWidget(),
           appBar: AppBar(
             actions: [
               IconButton(

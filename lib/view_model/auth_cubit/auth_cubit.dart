@@ -98,15 +98,14 @@ class AuthCubit extends Cubit<AuthState> {
         print('UserDoc Is Null');
         return;
       } else {
+
         email = userDoc.get('email');
         name = userDoc.get('name');
         phone = userDoc.get('phone');
         imageUrl = userDoc.get('image');
         position = userDoc.get('position');
         id = userDoc.get('id');
-        // Timestamp joinedAtStamp = userDoc.get('joined At');
-        // var joinedDate = joinedAtStamp.toDate();
-        // joinedAt = '${joinedDate.year}-${joinedDate.month}-${joinedDate.day}';
+        print(imageUrl);
       }
       emit(GetUserDataSuccessState());
     } catch (e) {
