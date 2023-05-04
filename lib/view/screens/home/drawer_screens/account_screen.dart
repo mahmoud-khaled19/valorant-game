@@ -8,7 +8,6 @@ import 'package:workers/view/screens/home/home_screen/home_screen.dart';
 import 'package:workers/view/screens/login_error_screen.dart';
 import 'package:workers/view/widgets/default_button_widget.dart';
 import 'package:workers/view/widgets/default_custom_text.dart';
-
 import '../../../../view_model/auth_cubit/auth_cubit.dart';
 import '../../../../view_model/auth_cubit/auth_state.dart';
 
@@ -20,16 +19,16 @@ class AccountScreen extends StatelessWidget {
     this.image,
     this.phone,
     this.position,
-    this.userId,
     this.isSameUser,
+    this.userId,
   }) : super(key: key);
   final String? name;
   final String? phone;
   final String? email;
   final String? position;
   final String? image;
-  final String? userId;
   final bool? isSameUser;
+  final String? userId;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +53,7 @@ class AccountScreen extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () {
                               GlobalMethods.navigateTo(
-                                  context,  HomeScreen());
+                                  context, const HomeScreen());
                             },
                             child: const DefaultCustomText(
                               alignment: Alignment.centerLeft,

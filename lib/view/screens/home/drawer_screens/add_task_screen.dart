@@ -120,7 +120,7 @@ class AddTaskScreen extends StatelessWidget {
                     label: 'Task Category',
                   ),
                   DefaultTextFormField(
-                    maxLength: 100,
+                    maxLength: 30,
                     controller: taskTitleController,
                     validate: (String? value) {
                       if (value!.isEmpty) {
@@ -152,7 +152,7 @@ class AddTaskScreen extends StatelessWidget {
                               lastDate: DateTime(2024))
                           .then((value) {
                         deadLineDateController.text =
-                            DateFormat.yMMMd().format(value!);
+                            DateFormat.yMd().format(value!);
                         print(deadLineDateController.text);
                       });
                     },
@@ -182,6 +182,7 @@ class AddTaskScreen extends StatelessWidget {
                               taskTitle: taskTitleController.text,
                               taskDescription: descriptionController.text,
                               deadLineTimeStamp:deadLineDateController.text,
+
                               context: context,
                             ).then((value) {
                               categoryController.clear();

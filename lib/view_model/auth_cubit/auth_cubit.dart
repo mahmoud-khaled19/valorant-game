@@ -83,14 +83,12 @@ class AuthCubit extends Cubit<AuthState> {
   String? email;
   String? imageUrl;
   String? position;
-
-  // String? joinedAt;
   String? id;
 
   Future getUserData(
     BuildContext context,
   ) async {
-    final userId = auth.currentUser!.uid;
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     print(userId);
     emit(GetUserDataLoadingState());
     try {

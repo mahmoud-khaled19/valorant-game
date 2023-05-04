@@ -56,7 +56,7 @@ class DrawerWidget extends StatelessWidget {
           DefaultListTile(
             title: AppStrings.account,
             function: () {
-              GlobalMethods.navigateTo(context, const AccountScreen(isSameUser: true,));
+              GlobalMethods.navigateTo(context,  AccountScreen(isSameUser: true,));
             },
             leadingWidget: const Icon(Icons.account_circle_sharp),
           ),

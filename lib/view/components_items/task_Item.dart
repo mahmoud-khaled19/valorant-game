@@ -54,7 +54,10 @@ class TaskItem extends StatelessWidget {
           ),
         ),
         onTap: () {
-          GlobalMethods.navigateTo(context, const TasksDetailsScreen());
+          GlobalMethods.navigateTo(context,  TasksDetailsScreen(
+            taskId: taskId,
+            uploadedBy: uploadedBy,
+          ));
         },
         onLongPress: () {
           if (user == uploadedBy) {

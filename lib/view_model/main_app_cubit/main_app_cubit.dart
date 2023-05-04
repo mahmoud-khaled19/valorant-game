@@ -17,7 +17,8 @@ class MainAppCubit extends Cubit<MainAppState> {
   MainAppCubit get(context) => BlocProvider.of(context);
   final FirebaseFirestore authStore = FirebaseFirestore.instance;
   final userId = FirebaseAuth.instance.currentUser!.uid;
- String? chosenCategory;
+  String? chosenCategory;
+
   showCategories(context) {
     showDialog(
         context: context,
@@ -59,7 +60,7 @@ class MainAppCubit extends Cubit<MainAppState> {
                 },
                 itemCount: GlobalMethods.tasksSort.length,
                 separatorBuilder: (BuildContext context, int index) =>
-                const Divider(),
+                    const Divider(),
               ),
             ),
             actions: [
@@ -77,7 +78,7 @@ class MainAppCubit extends Cubit<MainAppState> {
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      chosenCategory =null ;
+                      chosenCategory = null;
                       emit(ChangeCategoryFilter());
                     },
                     child: DefaultCustomText(
@@ -91,8 +92,6 @@ class MainAppCubit extends Cubit<MainAppState> {
         });
   }
 
-
-
   Future uploadTask({
     required String taskCategory,
     required String taskTitle,
@@ -100,7 +99,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     required String deadLineTimeStamp,
     required BuildContext context,
   }) async {
-    var taskId =const Uuid().v4();
+    var taskId = const Uuid().v4();
     emit(UploadTaskLoadingState());
     await authStore.collection('tasks').doc(taskId).set({
       'taskId': taskId,
@@ -119,48 +118,61 @@ class MainAppCubit extends Cubit<MainAppState> {
       GlobalMethods.navigateAndFinish(context, const HomeScreen());
       emit(UploadTaskSuccessState());
     }).catchError((error) {
-      GlobalMethods.showSnackBar(
-          context, error.toString(), Colors.red);
+      GlobalMethods.showSnackBar(context, error.toString(), Colors.red);
       emit(UploadTaskSuccessState());
     });
   }
 
-  String? uploadedBy;
-  String? uploadedOn;
   String? taskDescription;
   String? taskCategory;
   String? taskTitle;
-  String? taskId;
   List? taskComment;
   bool? isDone;
+  bool? isDeadLineFinished = false;
+  String? position;
+  String? name;
+  String? image;
+  Timestamp? uploadedOnTimestamp;
+  String? deadLineDate;
+  String? uploadedOn;
 
   Future getTasksData(
-      BuildContext context,
-      ) async {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
-    print(userId);
-    // emit(GetUserDataLoadingState());
+    BuildContext context,
+  {
+    required String taskId,
+    required String upLoadedBy,
+}
+  ) async {
+    emit(GetTaskDataLoadingState());
     try {
       final DocumentSnapshot userDoc =
-      await authStore.collection('users').doc(userId).get();
+          await authStore.collection('users').doc(upLoadedBy).get();
+      final DocumentSnapshot tasksDoc =
+          await authStore.collection('tasks').doc(taskId).get();
       if (userDoc == null) {
         print('UserDoc Is Null');
         return;
       } else {
-        // email = userDoc.get('email');
-        // name = userDoc.get('name');
-        // phone = userDoc.get('phone');
-        // imageUrl = userDoc.get('image');
-        // position = userDoc.get('position');
-        // id = userDoc.get('id');
-        // Timestamp joinedAtStamp = userDoc.get('joined At');
-        // var joinedDate = joinedAtStamp.toDate();
-        // joinedAt = '${joinedDate.year}-${joinedDate.month}-${joinedDate.day}';
+        ///users
+        name = userDoc.get('name');
+        image = userDoc.get('image');
+        position = userDoc.get('position');
+
+        /// tasks
+        taskTitle = tasksDoc.get('taskTitle');
+        taskDescription = tasksDoc.get('taskDescription');
+        isDone = tasksDoc.get('isDone');
+        taskCategory = tasksDoc.get('taskCategory');
+        uploadedOnTimestamp = tasksDoc.get('uploadedOn');
+        var postdate = uploadedOnTimestamp!.toDate();
+        uploadedOn = '${postdate.year} / ${postdate.month} / ${postdate.day}';
+        deadLineDate = tasksDoc.get('DeadLineTime');
       }
-      // emit(GetUserDataSuccessState());
+      emit(GetTaskDataSuccessState());
     } catch (e) {
       print(e.toString());
       GlobalMethods.showSnackBar(context, e.toString(), Colors.red);
+      emit(GetTaskDataErrorState());
     }
   }
 }
