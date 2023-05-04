@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:workers/app_constance/strings_manager.dart';
 import 'package:workers/view/widgets/default_button_widget.dart';
 import 'package:workers/view/widgets/default_custom_text.dart';
@@ -144,22 +144,24 @@ class AddTaskScreen extends StatelessWidget {
                   ),
                   DefaultTextFormField(
                     enabled: false,
-                    function: () async{
-                    await  showDatePicker(
+                    function: () async {
+                      await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime.now(),
                               lastDate: DateTime(2024))
                           .then((value) {
+                        cubit.deadLineTimestamp =
+                            Timestamp.fromMicrosecondsSinceEpoch(
+                                value!.microsecondsSinceEpoch);
                         deadLineDateController.text =
-                            DateFormat.yMd().format(value!);
-                        print(deadLineDateController.text);
+                            '${value.year}/${value.month}/${value.day}';
                       });
                     },
                     controller: deadLineDateController,
                     validate: (String? value) {
                       if (value!.isEmpty) {
-                      return 'Pick up dead Line Date';
+                        return 'Pick up dead Line Date';
                       }
                     },
                     textType: TextInputType.number,
@@ -169,22 +171,23 @@ class AddTaskScreen extends StatelessWidget {
                     height: 20,
                   ),
                   Visibility(
-                    visible: state is !UploadTaskLoadingState,
-                    replacement:const Center(
+                    visible: state is! UploadTaskLoadingState,
+                    replacement: const Center(
                       child: CircularProgressIndicator(),
                     ),
                     child: DefaultButton(
                         text: AppStrings.upload,
                         function: () {
                           if (formKey.currentState!.validate()) {
-                            cubit.uploadTask(
+                            cubit
+                                .uploadTask(
                               taskCategory: categoryController.text,
                               taskTitle: taskTitleController.text,
                               taskDescription: descriptionController.text,
-                              deadLineTimeStamp:deadLineDateController.text,
-
+                              deadLineTimeStamp: cubit.deadLineTimestamp?? Timestamp.fromDate(DateTime.now()),
                               context: context,
-                            ).then((value) {
+                            )
+                                .then((value) {
                               categoryController.clear();
                               taskTitleController.clear();
                               descriptionController.clear();
@@ -215,6 +218,5 @@ class AddTaskScreen extends StatelessWidget {
         );
       },
     );
-
   }
 }

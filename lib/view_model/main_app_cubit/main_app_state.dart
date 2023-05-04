@@ -15,3 +15,4 @@ class GetTaskDataLoadingState extends MainAppState {}
 class GetTaskDataSuccessState extends MainAppState {}
 
 class GetTaskDataErrorState extends MainAppState {}
+class ChangeDoneState extends MainAppState {}

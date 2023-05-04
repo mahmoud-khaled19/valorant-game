@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workers/app_constance/assets_manager.dart';
 import 'package:workers/app_constance/values_manager.dart';
 import 'package:workers/view/components_items/comments_item.dart';
 import 'package:workers/view_model/main_app_cubit/main_app_cubit.dart';
 import 'package:workers/view_model/main_app_cubit/main_app_state.dart';
 import '../../../../app_constance/strings_manager.dart';
-import '../../../../generated/assets.dart';
 import '../../../widgets/animated_button.dart';
 import '../../../widgets/default_custom_text.dart';
 
@@ -20,22 +20,16 @@ class TasksDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double hSize = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double wSize = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double hSize = MediaQuery.of(context).size.height;
+    double wSize = MediaQuery.of(context).size.width;
     return BlocProvider(
-      create: (context) =>
-      MainAppCubit()
+      create: (context) => MainAppCubit()
         ..getTasksData(context, taskId: taskId, upLoadedBy: uploadedBy),
       child: BlocBuilder<MainAppCubit, MainAppState>(
         builder: (context, state) {
           MainAppCubit cubit = BlocProvider.of(context);
-          return Scaffold(
+          return  state is GetTaskDataLoadingState ?
+         const Center(child: CircularProgressIndicator(),): Scaffold(
             body: Padding(
               padding: const EdgeInsets.all(15),
               child: ListView(
@@ -60,17 +54,12 @@ class TasksDetailsScreen extends StatelessWidget {
                   const SizedBox(height: AppSize.s16),
                   DefaultCustomText(
                       text: cubit.taskTitle ?? AppStrings.tasks,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .headlineLarge),
+                      style: Theme.of(context).textTheme.headlineLarge),
                   const SizedBox(height: AppSize.s14),
                   Container(
                     padding: const EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                        color: Theme
-                            .of(context)
-                            .canvasColor,
+                        color: Theme.of(context).canvasColor,
                         borderRadius: BorderRadius.circular(10)),
                     width: wSize * 0.9,
                     child: Column(
@@ -80,10 +69,7 @@ class TasksDetailsScreen extends StatelessWidget {
                           children: [
                             DefaultCustomText(
                                 text: AppStrings.uploadedBy,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleSmall),
+                                style: Theme.of(context).textTheme.titleSmall),
                             const SizedBox(
                               width: 40,
                             ),
@@ -91,14 +77,21 @@ class TasksDetailsScreen extends StatelessWidget {
                               children: [
                                 CircleAvatar(
                                   backgroundColor:
-                                  Theme
-                                      .of(context)
-                                      .scaffoldBackgroundColor,
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   radius: 30,
                                   child: CircleAvatar(
                                     radius: 27,
-                                    child: Image(
-                                      image: NetworkImage(cubit.image ?? ''),),
+                                    child: Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                              cubit.image ??
+                                                  ImagesManager.loginImage,
+                                            ))),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -108,8 +101,7 @@ class TasksDetailsScreen extends StatelessWidget {
                                 children: [
                                   DefaultCustomText(
                                       text: cubit.name ?? AppStrings.tasks,
-                                      style: Theme
-                                          .of(context)
+                                      style: Theme.of(context)
                                           .textTheme
                                           .titleSmall),
                                   SizedBox(
@@ -117,13 +109,12 @@ class TasksDetailsScreen extends StatelessWidget {
                                   ),
                                   DefaultCustomText(
                                       text: cubit.position ?? AppStrings.tasks,
-                                      style: Theme
-                                          .of(context)
+                                      style: Theme.of(context)
                                           .textTheme
                                           .titleSmall
                                           ?.copyWith(
-                                          fontSize: 12,
-                                          color: Colors.grey.shade200)),
+                                              fontSize: 12,
+                                              color: Colors.grey.shade200)),
                                 ],
                               ),
                             )
@@ -138,17 +129,11 @@ class TasksDetailsScreen extends StatelessWidget {
                             DefaultCustomText(
                                 alignment: Alignment.centerLeft,
                                 text: 'Uploaded on',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleMedium),
+                                style: Theme.of(context).textTheme.titleMedium),
                             DefaultCustomText(
                                 alignment: Alignment.centerRight,
                                 text: cubit.uploadedOn.toString() ?? '',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleSmall),
+                                style: Theme.of(context).textTheme.titleSmall),
                           ],
                         ),
                         SizedBox(
@@ -160,27 +145,21 @@ class TasksDetailsScreen extends StatelessWidget {
                             DefaultCustomText(
                                 alignment: Alignment.centerLeft,
                                 text: 'Dead Line Date',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleMedium),
+                                style: Theme.of(context).textTheme.titleMedium),
                             DefaultCustomText(
                                 alignment: Alignment.centerRight,
                                 text: cubit.deadLineDate ?? '',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleSmall),
+                                style: Theme.of(context).textTheme.titleSmall),
                           ],
                         ),
                         const SizedBox(
                           height: AppSize.s16,
                         ),
                         DefaultCustomText(
-                            text: cubit.deadLineDate !=
-                                DateTime.now().toString() ? 'Still Have Time' : 'Finished Task Time',
-                            style: Theme
-                                .of(context)
+                            text: cubit.isDeadLineFinished!
+                                ? 'Still Have Time'
+                                : 'Finished Task Time',
+                            style: Theme.of(context)
                                 .textTheme
                                 .titleSmall
                                 ?.copyWith(color: Colors.green)),
@@ -190,36 +169,37 @@ class TasksDetailsScreen extends StatelessWidget {
                         DefaultCustomText(
                             alignment: Alignment.centerLeft,
                             text: 'Done State :',
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleLarge),
+                            style: Theme.of(context).textTheme.titleLarge),
                         SizedBox(
                           height: hSize * 0.01,
                         ),
                         Row(
                           children: [
-                            DefaultCustomText(
-                                text: 'Done ',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleSmall),
+                            TextButton(
+                                onPressed: () {
+                                  cubit.changeToDoneState(
+                                      taskId, uploadedBy, context);
+                                },
+                                child: const Text('Done')),
+                            if (cubit.isDone == true)
+                              Icon(
+                                Icons.check_box,
+                                color: Theme.of(context).splashColor,
+                              ),
                             const SizedBox(
-                              width: AppSize.s20,
+                              width: AppSize.s100,
                             ),
-                            DefaultCustomText(
-                                text: 'Not Done yet ',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleSmall),
-                            Icon(
-                              Icons.check_box,
-                              color: Theme
-                                  .of(context)
-                                  .splashColor,
-                            )
+                            TextButton(
+                                onPressed: () {
+                                  cubit.changeToNotDoneState(
+                                      taskId, uploadedBy, context);
+                                },
+                                child: const Text('Not Done')),
+                            if (cubit.isDone == false)
+                              Icon(
+                                Icons.check_box,
+                                color: Theme.of(context).splashColor,
+                              ),
                           ],
                         ),
                         const Divider(
@@ -228,20 +208,14 @@ class TasksDetailsScreen extends StatelessWidget {
                         DefaultCustomText(
                             alignment: Alignment.centerLeft,
                             text: 'Task description',
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleLarge),
+                            style: Theme.of(context).textTheme.titleLarge),
                         const SizedBox(
                           height: AppSize.s10,
                         ),
                         DefaultCustomText(
                             alignment: Alignment.centerLeft,
                             text: cubit.taskDescription ?? AppStrings.tasks,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleSmall),
+                            style: Theme.of(context).textTheme.titleSmall),
                         const SizedBox(
                           height: AppSize.s16,
                         ),

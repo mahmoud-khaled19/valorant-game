@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -43,7 +42,9 @@ class MainAppCubit extends Cubit<MainAppState> {
                     },
                     child: Row(
                       children: [
-                        const Icon(Icons.check_box),
+                        chosenCategory == GlobalMethods.tasksSort[index]
+                            ? const Icon(Icons.check_box)
+                            : const Icon(Icons.check_box_outline_blank),
                         const SizedBox(
                           width: 10,
                         ),
@@ -96,7 +97,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     required String taskCategory,
     required String taskTitle,
     required String taskDescription,
-    required String deadLineTimeStamp,
+    required Timestamp deadLineTimeStamp,
     required BuildContext context,
   }) async {
     var taskId = const Uuid().v4();
@@ -127,22 +128,21 @@ class MainAppCubit extends Cubit<MainAppState> {
   String? taskCategory;
   String? taskTitle;
   List? taskComment;
-  bool? isDone;
+  bool? isDone = false;
   bool? isDeadLineFinished = false;
   String? position;
   String? name;
   String? image;
   Timestamp? uploadedOnTimestamp;
+  Timestamp? deadLineTimestamp;
   String? deadLineDate;
   String? uploadedOn;
 
   Future getTasksData(
-    BuildContext context,
-  {
+    BuildContext context, {
     required String taskId,
     required String upLoadedBy,
-}
-  ) async {
+  }) async {
     emit(GetTaskDataLoadingState());
     try {
       final DocumentSnapshot userDoc =
@@ -166,7 +166,10 @@ class MainAppCubit extends Cubit<MainAppState> {
         uploadedOnTimestamp = tasksDoc.get('uploadedOn');
         var postdate = uploadedOnTimestamp!.toDate();
         uploadedOn = '${postdate.year} / ${postdate.month} / ${postdate.day}';
-        deadLineDate = tasksDoc.get('DeadLineTime');
+        deadLineTimestamp = tasksDoc.get('DeadLineTime');
+        var date = deadLineTimestamp!.toDate();
+        deadLineDate = '${date.year} / ${date.month} / ${date.day}';
+        isDeadLineFinished = date.isAfter(DateTime.now());
       }
       emit(GetTaskDataSuccessState());
     } catch (e) {
@@ -174,5 +177,21 @@ class MainAppCubit extends Cubit<MainAppState> {
       GlobalMethods.showSnackBar(context, e.toString(), Colors.red);
       emit(GetTaskDataErrorState());
     }
+  }
+
+  changeToDoneState(taskId, upLoadedBy, context) {
+    FirebaseFirestore.instance
+        .collection('tasks')
+        .doc(taskId)
+        .update({'isDone': true});
+    getTasksData(context, taskId: taskId, upLoadedBy: upLoadedBy);
+  }
+
+  changeToNotDoneState(taskId, upLoadedBy, context) {
+    FirebaseFirestore.instance
+        .collection('tasks')
+        .doc(taskId)
+        .update({'isDone': false});
+    getTasksData(context, taskId: taskId, upLoadedBy: upLoadedBy);
   }
 }

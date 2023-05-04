@@ -40,7 +40,7 @@ class TaskItem extends StatelessWidget {
           child: CircleAvatar(
             backgroundColor: Colors.white,
             radius: 20,
-            child: isDone
+            child: !isDone
                 ? const Icon(
                     Icons.alarm,
                     size: 30,
