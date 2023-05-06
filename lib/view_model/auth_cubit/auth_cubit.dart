@@ -89,7 +89,7 @@ class AuthCubit extends Cubit<AuthState> {
     BuildContext context,
   ) async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
-    print(userId);
+
     emit(GetUserDataLoadingState());
     try {
       final DocumentSnapshot userDoc =
@@ -105,7 +105,6 @@ class AuthCubit extends Cubit<AuthState> {
         imageUrl = userDoc.get('image');
         position = userDoc.get('position');
         id = userDoc.get('id');
-        print(imageUrl);
       }
       emit(GetUserDataSuccessState());
     } catch (e) {
@@ -156,8 +155,7 @@ class AuthCubit extends Cubit<AuthState> {
                       Navigator.pop(context);
                     },
                     child: DefaultCustomText(
-                        text: AppStrings.cancel,
-                        style: Theme.of(context).textTheme.titleSmall),
+                        text: AppStrings.cancel),
                   ),
                   TextButton(
                     onPressed: () async {
@@ -166,9 +164,8 @@ class AuthCubit extends Cubit<AuthState> {
                             context, const UserLoginStates());
                       });
                     },
-                    child: DefaultCustomText(
-                        text: AppStrings.ok,
-                        style: Theme.of(context).textTheme.titleSmall),
+                    child:const DefaultCustomText(
+                        text: AppStrings.ok,),
                   ),
                 ],
               )

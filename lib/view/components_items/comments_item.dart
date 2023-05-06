@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
 
-class CommentsList extends StatelessWidget {
-  const CommentsList({Key? key}) : super(key: key);
+class CommentItem extends StatelessWidget {
+  final String commentBody;
+  final String commenterName;
+  final String commenterImage;
+  final String commentId;
+  final String userId;
+ // final Timestamp time;
+
+  const CommentItem({
+    Key? key,
+    required this.userId,
+    required this.commenterName,
+    required this.commentBody,
+    required this.commenterImage,
+    required this.commentId,
+   // required this.time,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,18 +27,22 @@ class CommentsList extends StatelessWidget {
           right: BorderSide(
               width: 1, style: BorderStyle.solid, color: Colors.grey),
         )),
-        child: const CircleAvatar(
-          radius: 20,
-          child: Icon(
-            Icons.person,
-            size: 40,
+        child:  CircleAvatar(
+          radius: 25,
+          child: Container(
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: NetworkImage(
+                      commenterImage,
+                    ))),
           ),
         ),
       ),
       onTap: () {},
       onLongPress: () {},
       title: Text(
-        'Commenter Name',
+       commenterName,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
         style: Theme.of(context).textTheme.titleMedium,
@@ -31,7 +50,7 @@ class CommentsList extends StatelessWidget {
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 10),
         child: Text(
-          'Comment',
+          commentBody,
           maxLines: 4,
           style: Theme.of(context)
               .textTheme

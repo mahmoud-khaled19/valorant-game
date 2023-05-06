@@ -97,11 +97,8 @@ class AddTaskScreen extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      child: DefaultCustomText(
-                                          text: AppStrings.close,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleSmall),
+                                      child: const DefaultCustomText(
+                                          text: AppStrings.close,)
                                     ),
                                   ],
                                 )

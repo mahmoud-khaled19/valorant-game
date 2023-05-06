@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workers/view/screens/home/tasks_details_screen/tasks_details_screen.dart';
+import 'package:workers/view/screens/home/tasks_details_screen/tasks_details_main_screen.dart';
 
 import '../../app_constance/global_methods.dart';
 import '../../app_constance/strings_manager.dart';

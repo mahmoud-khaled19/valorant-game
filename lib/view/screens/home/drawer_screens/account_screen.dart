@@ -87,12 +87,7 @@ class AccountScreen extends StatelessWidget {
                             ),
                             DefaultCustomText(
                               text: position ?? cubit.position!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(
-                                    color: Theme.of(context).splashColor,
-                                  ),
+                              color: Theme.of(context).splashColor,
                             ),
                             const Divider(
                               thickness: 2,
@@ -203,6 +198,7 @@ class AccountScreen extends StatelessWidget {
         }
         return const EmptyScreen(
             text: 'Error! Restart The App', image: Assets.imagesNoNews);
+
       },
     );
   }

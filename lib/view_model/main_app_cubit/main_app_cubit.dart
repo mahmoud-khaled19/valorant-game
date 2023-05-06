@@ -17,7 +17,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   final FirebaseFirestore authStore = FirebaseFirestore.instance;
   final userId = FirebaseAuth.instance.currentUser!.uid;
   String? chosenCategory;
-
+  bool isCommenting=false;
   showCategories(context) {
     showDialog(
         context: context,
@@ -72,9 +72,8 @@ class MainAppCubit extends Cubit<MainAppState> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: DefaultCustomText(
-                        text: AppStrings.close,
-                        style: Theme.of(context).textTheme.titleSmall),
+                    child:const DefaultCustomText(
+                        text: AppStrings.close,),
                   ),
                   TextButton(
                     onPressed: () {
@@ -82,9 +81,8 @@ class MainAppCubit extends Cubit<MainAppState> {
                       chosenCategory = null;
                       emit(ChangeCategoryFilter());
                     },
-                    child: DefaultCustomText(
-                        text: AppStrings.cancelFilter,
-                        style: Theme.of(context).textTheme.titleSmall),
+                    child:const DefaultCustomText(
+                        text: AppStrings.cancelFilter,),
                   )
                 ],
               )
@@ -92,7 +90,10 @@ class MainAppCubit extends Cubit<MainAppState> {
           );
         });
   }
-
+  changeAddCommentButton(){
+    isCommenting = !isCommenting;
+    emit(ChangeAddCommentState());
+  }
   Future uploadTask({
     required String taskCategory,
     required String taskTitle,
@@ -150,7 +151,6 @@ class MainAppCubit extends Cubit<MainAppState> {
       final DocumentSnapshot tasksDoc =
           await authStore.collection('tasks').doc(taskId).get();
       if (userDoc == null) {
-        print('UserDoc Is Null');
         return;
       } else {
         ///users

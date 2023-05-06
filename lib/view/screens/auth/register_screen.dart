@@ -253,9 +253,8 @@ class RegisterScreen extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            DefaultCustomText(
-                                text: AppStrings.alreadyHaveAccount,
-                                style: Theme.of(context).textTheme.titleSmall),
+                            const DefaultCustomText(
+                                text: AppStrings.alreadyHaveAccount,),
                             TextButton(
                                 onPressed: () {
                                   GlobalMethods.navigateTo(
@@ -331,9 +330,8 @@ class RegisterScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: DefaultCustomText(
-                        text: AppStrings.close,
-                        style: Theme.of(context).textTheme.titleSmall),
+                    child: const DefaultCustomText(
+                        text: AppStrings.close,),
                   ),
                 ],
               )

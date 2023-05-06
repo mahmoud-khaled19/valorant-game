@@ -50,6 +50,6 @@ class AppStrings {
   static const String nameValidateMessage = 'Write a valid Name';
   static const String phoneValidateMessage = 'Write a valid phone Number';
   static const String positionValidateMessage = 'insert your Position';
-  static const String passwordValidateMessage = 'password can\'t be less than 6 digits ' ;
+  static const String passwordValidateMessage = 'field can\'t be less 6 digits' ;
 
 }
