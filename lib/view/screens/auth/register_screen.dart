@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workers/app_constance/assets_manager.dart';
+import 'package:workers/app_constance/colors_manager.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import '../../../app_constance/strings_manager.dart';
 import '../../../app_constance/values_manager.dart';
@@ -47,7 +49,9 @@ class RegisterScreen extends StatelessWidget {
                         DefaultCustomText(
                           alignment: Alignment.centerLeft,
                           text: AppStrings.register,
-                          style: Theme.of(context).textTheme.headlineLarge,
+                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                            color: ColorsManager.lightScaffoldColor
+                          ),
                         ),
                         const SizedBox(
                           height: AppSize.s10,
@@ -55,7 +59,9 @@ class RegisterScreen extends StatelessWidget {
                         DefaultCustomText(
                           alignment: Alignment.centerLeft,
                           text: AppStrings.registerMessage,
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: ColorsManager.lightScaffoldColor
+                          ),
                         ),
                         const SizedBox(
                           height: AppSize.s20,
@@ -98,7 +104,7 @@ class RegisterScreen extends StatelessWidget {
                                       child: cubit.imageFile == null
                                           ? CachedNetworkImage(
                                               imageUrl:
-                                                  'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
+                                                  ImagesManager.registerImage,
                                             )
                                           : Image.file(
                                               cubit.imageFile!,
@@ -108,7 +114,60 @@ class RegisterScreen extends StatelessWidget {
                                   ),
                                   IconButton(
                                       onPressed: () {
-                                        cubit.choosePhotoDialog(context);
+                                        GlobalMethods.showAlertDialog(
+                                          context: context,
+                                          title: DefaultCustomText(
+                                            text: AppStrings.options,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                          content: const Divider(),
+                                          actions: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(10),
+                                              child: Column(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      cubit.pickImageWithCamera(
+                                                          context);
+                                                    },
+                                                    child: Row(
+                                                      children: const [
+                                                        Icon(Icons.camera),
+                                                        SizedBox(
+                                                          width: 15,
+                                                        ),
+                                                        Text(AppStrings.camera)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 25,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      cubit
+                                                          .pickImageWithGallery(
+                                                              context);
+                                                    },
+                                                    child: Row(
+                                                      children: const [
+                                                        Icon(Icons
+                                                            .picture_in_picture),
+                                                        SizedBox(
+                                                          width: 15,
+                                                        ),
+                                                        Text(AppStrings.gallery)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        );
                                       },
                                       icon: Icon(cubit.imageFile == null
                                           ? Icons.add_a_photo
@@ -176,39 +235,6 @@ class RegisterScreen extends StatelessWidget {
                             return null;
                           },
                           label: AppStrings.labelPassword,
-                          onSubmittedFunction: () {
-                            if (formKey.currentState!.validate()) {
-                              if (cubit.imageFile != null) {
-                                cubit
-                                    .registerWithEmailAndPassword(
-                                  context: context,
-                                  email: emailController.text
-                                      .toLowerCase()
-                                      .trim(),
-                                  password: passwordController.text.trim(),
-                                  phone: phoneController.text.trim(),
-                                  name: nameController.text.trim(),
-                                  position: positionController.text.trim(),
-                                  time: Timestamp.now(),
-                                  image: '${cubit.imageFile!}',
-                                )
-                                    .then((value) {
-                                  GlobalMethods.showSnackBar(
-                                      context,
-                                      'Email Created Successfully',
-                                      Colors.green);
-                                  GlobalMethods.navigateAndFinish(
-                                      context, const LoginScreen());
-                                });
-                              }
-                              else {
-                                GlobalMethods.showSnackBar(
-                                    context,
-                                    'Choose Image Before Register',
-                                    Colors.red);
-                              }
-                            }
-                          },
                           prefixIcon: Icons.lock,
                         ),
                         const SizedBox(
@@ -224,8 +250,7 @@ class RegisterScreen extends StatelessWidget {
                               function: () {
                                 if (formKey.currentState!.validate()) {
                                   if (cubit.imageFile != null) {
-                                    cubit
-                                        .registerWithEmailAndPassword(
+                                    cubit.registerWithEmailAndPassword(
                                       context: context,
                                       email: emailController.text
                                           .toLowerCase()
@@ -237,24 +262,21 @@ class RegisterScreen extends StatelessWidget {
                                       time: Timestamp.now(),
                                       image: '${cubit.imageFile!}',
                                     );
-
+                                  } else {
+                                    GlobalMethods.showSnackBar(context,
+                                        AppStrings.chooseImage, Colors.red);
                                   }
-                                  else {
-                                    GlobalMethods.showSnackBar(
-                                        context,
-                                        'Choose Image Before Register',
-                                        Colors.red);
-                                  }
-                                }
-                                else{
+                                } else {
                                   return;
                                 }
                               }),
                         ),
                         Row(
                           children: [
-                            const DefaultCustomText(
-                                text: AppStrings.alreadyHaveAccount,),
+                            DefaultCustomText(
+                              text: AppStrings.alreadyHaveAccount,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
                             TextButton(
                                 onPressed: () {
                                   GlobalMethods.navigateTo(
@@ -279,64 +301,62 @@ class RegisterScreen extends StatelessWidget {
   }
 
   void showPosition(context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Center(
-              child: Text(
-                AppStrings.tasks,
-              ),
-            ),
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      positionController.text =
-                          GlobalMethods.jopPositions[index];
-                      Navigator.pop(context);
-                    },
-                    child: Row(
-                      children: [
-                        const Icon(Icons.check_box),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          GlobalMethods.jopPositions[index],
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(fontStyle: FontStyle.italic),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                itemCount: GlobalMethods.tasksSort.length,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-              ),
-            ),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+    GlobalMethods.showAlertDialog(
+      context: context,
+      title: const Center(
+        child: Text(
+          AppStrings.tasks,
+        ),
+      ),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.7,
+        child: ListView.separated(
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: () {
+                positionController.text = GlobalMethods.jopPositions[index];
+                Navigator.pop(context);
+              },
+              child: Row(
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const DefaultCustomText(
-                        text: AppStrings.close,),
+                  const Icon(Icons.check_box),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    GlobalMethods.jopPositions[index],
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(fontStyle: FontStyle.italic),
                   ),
                 ],
-              )
-            ],
-          );
-        });
+              ),
+            );
+          },
+          itemCount: GlobalMethods.tasksSort.length,
+          separatorBuilder: (BuildContext context, int index) =>
+              const Divider(),
+        ),
+      ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: DefaultCustomText(
+                text: AppStrings.close,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+          ],
+        )
+      ],
+    );
   }
 }

@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/app_constance/strings_manager.dart';
@@ -26,18 +24,16 @@ class UserLoginStates extends StatelessWidget {
                 return const LoginScreen();
               }
               else if (userSnapshot.hasData) {
-                print(FirebaseAuth.instance.currentUser!.email);
-                return  HomeScreen();
+                return const HomeScreen();
               }
               else if (userSnapshot.hasError) {
-
                 return const EmptyScreen(
                     text: AppStrings.errorMessage,
                     image: Assets.imagesNoNews);
               }
               return const Scaffold(
                 body: Center(
-                  child: Text('Test'),
+                  child: Text('Restart The App'),
                 ),
               );
             }

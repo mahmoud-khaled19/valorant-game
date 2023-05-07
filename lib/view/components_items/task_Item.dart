@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:workers/app_constance/firebase_constance.dart';
 import 'package:workers/view/screens/home/tasks_details_screen/tasks_details_main_screen.dart';
 
 import '../../app_constance/global_methods.dart';
@@ -80,7 +81,9 @@ class TaskItem extends StatelessWidget {
               taskDescription,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.titleSmall,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontSize: 14
+              ),
             )
           ],
         ),
@@ -105,7 +108,7 @@ class TaskItem extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     FirebaseFirestore.instance
-                        .collection('tasks')
+                        .collection(FirebaseConstance.taskCollection)
                         .doc(taskId)
                         .delete();
                     Navigator.pop(context);

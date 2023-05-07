@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workers/app_constance/firebase_constance.dart';
 import 'package:workers/app_constance/strings_manager.dart';
 import 'package:workers/view_model/main_app_cubit/main_app_cubit.dart';
+import '../../../../app_constance/global_methods.dart';
 import '../../../../generated/assets.dart';
 import '../../../../view_model/main_app_cubit/main_app_state.dart';
 import '../../../components_items/task_Item.dart';
-import '../../../widgets/drawer_widget.dart';
+import '../../../widgets/default_custom_text.dart';
+import '../drawer_screens/drawer_widget.dart';
 import '../../login_error_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,16 +17,93 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MainAppCubit, MainAppState>(
+    return BlocProvider(
+  create: (context) => MainAppCubit(),
+  child: BlocConsumer<MainAppCubit, MainAppState>(
+      listener: (context, state) {
+        if (state is UploadTaskSuccessState) {
+          GlobalMethods.showSnackBar(
+              context, AppStrings.taskUploaded, Colors.green);
+          GlobalMethods.navigateAndFinish(context, const HomeScreen());
+        }
+      },
       builder: (context, state) {
         MainAppCubit cubit = BlocProvider.of(context);
         return Scaffold(
-          drawer:  const DrawerWidget(),
+          drawer: const DrawerWidget(),
           appBar: AppBar(
             actions: [
               IconButton(
                   onPressed: () {
-                    cubit.showCategories(context);
+                    GlobalMethods.showAlertDialog(
+                      context: context,
+                      title: const Center(
+                        child: Text(
+                          AppStrings.tasks,
+                        ),
+                      ),
+                      content: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                cubit.changeCategoryFilter(context, index);
+                              },
+                              child: Row(
+                                children: [
+                                  cubit.chosenCategory ==
+                                          GlobalMethods.tasksSort[index]
+                                      ? const Icon(Icons.check_box)
+                                      : const Icon(
+                                          Icons.check_box_outline_blank),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    GlobalMethods.tasksSort[index],
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(fontStyle: FontStyle.italic),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          itemCount: GlobalMethods.tasksSort.length,
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(),
+                        ),
+                      ),
+                      actions: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: DefaultCustomText(
+                                style: Theme.of(context).textTheme.titleSmall,
+                                text: AppStrings.close,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                cubit.cancelCategoryFilter(context);
+                              },
+                              child: DefaultCustomText(
+                                style: Theme.of(context).textTheme.titleSmall,
+                                text: AppStrings.cancelFilter,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    );
                   },
                   icon: const Icon(Icons.sort_outlined))
             ],
@@ -35,7 +115,7 @@ class HomeScreen extends StatelessWidget {
           ),
           body: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
-                .collection('tasks')
+                .collection(FirebaseConstance.taskCollection)
                 .where('taskCategory', isEqualTo: cubit.chosenCategory)
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapShot) {
@@ -66,7 +146,7 @@ class HomeScreen extends StatelessWidget {
                 } else {
                   return const Center(
                     child: EmptyScreen(
-                        text: 'No Tasks yet  ', image: Assets.imagesNoNews),
+                        text: AppStrings.noTasks, image: Assets.imagesNoNews),
                   );
                 }
               }
@@ -78,6 +158,7 @@ class HomeScreen extends StatelessWidget {
           ),
         );
       },
-    );
+    ),
+);
   }
 }

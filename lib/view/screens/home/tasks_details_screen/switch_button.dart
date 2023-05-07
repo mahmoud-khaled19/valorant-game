@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
+import 'package:workers/app_constance/firebase_constance.dart';
 import 'package:workers/view_model/main_app_cubit/main_app_cubit.dart';
 import '../../../../app_constance/global_methods.dart';
 import '../../../../app_constance/strings_manager.dart';
@@ -19,10 +20,9 @@ class AddCommentButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build button');
     var user = FirebaseAuth.instance.currentUser!.uid;
 
-    return BlocBuilder<MainAppCubit, MainAppState>( 
+    return BlocBuilder<MainAppCubit, MainAppState>(
       builder: (context, state) {
         MainAppCubit cubit = BlocProvider.of(context);
         return cubit.isCommenting == false
@@ -68,11 +68,11 @@ class AddCommentButton extends StatelessWidget {
                                 if (formKey.currentState!.validate()) {
                                   final DocumentSnapshot userDoc = await cubit
                                       .authStore
-                                      .collection('users')
+                                      .collection(FirebaseConstance.usersCollection)
                                       .doc(user)
                                       .get();
                                   await cubit.authStore
-                                      .collection('tasks')
+                                      .collection(FirebaseConstance.taskCollection)
                                       .doc(taskId)
                                       .update({
                                     'taskComment': FieldValue.arrayUnion([

@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 import 'package:workers/app_constance/global_methods.dart';
-import 'package:workers/view/screens/home/home_screen/home_screen.dart';
 
-import '../../app_constance/strings_manager.dart';
-import '../../view/widgets/default_custom_text.dart';
 import 'main_app_state.dart';
 
 class MainAppCubit extends Cubit<MainAppState> {
@@ -17,83 +14,13 @@ class MainAppCubit extends Cubit<MainAppState> {
   final FirebaseFirestore authStore = FirebaseFirestore.instance;
   final userId = FirebaseAuth.instance.currentUser!.uid;
   String? chosenCategory;
-  bool isCommenting=false;
-  showCategories(context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Center(
-              child: Text(
-                AppStrings.tasks,
-              ),
-            ),
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      chosenCategory = GlobalMethods.tasksSort[index];
-                      Navigator.pop(context);
-                      emit(ChangeCategoryFilter());
-                    },
-                    child: Row(
-                      children: [
-                        chosenCategory == GlobalMethods.tasksSort[index]
-                            ? const Icon(Icons.check_box)
-                            : const Icon(Icons.check_box_outline_blank),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          GlobalMethods.tasksSort[index],
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(fontStyle: FontStyle.italic),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                itemCount: GlobalMethods.tasksSort.length,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-              ),
-            ),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child:const DefaultCustomText(
-                        text: AppStrings.close,),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      chosenCategory = null;
-                      emit(ChangeCategoryFilter());
-                    },
-                    child:const DefaultCustomText(
-                        text: AppStrings.cancelFilter,),
-                  )
-                ],
-              )
-            ],
-          );
-        });
-  }
-  changeAddCommentButton(){
+  bool isCommenting = false;
+
+  changeAddCommentButton() {
     isCommenting = !isCommenting;
     emit(ChangeAddCommentState());
   }
+
   Future uploadTask({
     required String taskCategory,
     required String taskTitle,
@@ -108,16 +35,12 @@ class MainAppCubit extends Cubit<MainAppState> {
       'uploadedBy': userId,
       'uploadedOn': Timestamp.now(),
       'DeadLineTime': deadLineTimeStamp,
-      'position': 'position',
       'isDone': false,
       'taskDescription': taskDescription,
       'taskCategory': taskCategory,
       'taskTitle': taskTitle,
       'taskComment': [],
     }).then((value) {
-      GlobalMethods.showSnackBar(
-          context, 'Task Uploaded Successfully', Colors.green);
-      GlobalMethods.navigateAndFinish(context, const HomeScreen());
       emit(UploadTaskSuccessState());
     }).catchError((error) {
       GlobalMethods.showSnackBar(context, error.toString(), Colors.red);
@@ -193,5 +116,17 @@ class MainAppCubit extends Cubit<MainAppState> {
         .doc(taskId)
         .update({'isDone': false});
     getTasksData(context, taskId: taskId, upLoadedBy: upLoadedBy);
+  }
+
+  changeCategoryFilter(context, index) {
+    chosenCategory = GlobalMethods.tasksSort[index];
+    Navigator.pop(context);
+    emit(ChangeCategoryFilter());
+  }
+
+  cancelCategoryFilter(context) {
+    Navigator.pop(context);
+    chosenCategory = null;
+    emit(ChangeCategoryFilter());
   }
 }

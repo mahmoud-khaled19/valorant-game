@@ -6,10 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:workers/view/screens/auth/user_login_states_screen.dart';
 import '../../app_constance/global_methods.dart';
-import '../../app_constance/strings_manager.dart';
 import '../../view/screens/auth/login_screen.dart';
 import '../../view/screens/home/home_screen/home_screen.dart';
-import '../../view/widgets/default_custom_text.dart';
 import 'auth_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -21,7 +19,7 @@ class AuthCubit extends Cubit<AuthState> {
   final FirebaseFirestore authStore = FirebaseFirestore.instance;
   final FirebaseStorage authStorage = FirebaseStorage.instance;
 
-  bool isVisible = false;
+  bool isVisible = true;
   File? imageFile;
   XFile? pickedFile;
 
@@ -88,7 +86,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future getUserData(
     BuildContext context,
   ) async {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final userId = FirebaseAuth.instance.currentUser?.uid;
 
     emit(GetUserDataLoadingState());
     try {
@@ -98,7 +96,6 @@ class AuthCubit extends Cubit<AuthState> {
         print('UserDoc Is Null');
         return;
       } else {
-
         email = userDoc.get('email');
         name = userDoc.get('name');
         phone = userDoc.get('phone');
@@ -123,7 +120,7 @@ class AuthCubit extends Cubit<AuthState> {
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
       GlobalMethods.showSnackBar(context, 'Logged  Successfully', Colors.green);
-      GlobalMethods.navigateAndFinish(context, HomeScreen());
+      GlobalMethods.navigateAndFinish(context, const HomeScreen());
       emit(LoginInWithEmailSuccessState());
     }).catchError((error) {
       GlobalMethods.showSnackBar(
@@ -132,100 +129,10 @@ class AuthCubit extends Cubit<AuthState> {
     });
   }
 
-  void signOutMethod(context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Center(
-              child: Text(
-                AppStrings.signOut,
-              ),
-            ),
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: const Text(AppStrings.signOutMessage),
-            ),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: DefaultCustomText(
-                        text: AppStrings.cancel),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      await auth.signOut().then((value) {
-                        GlobalMethods.navigateAndFinish(
-                            context, const UserLoginStates());
-                      });
-                    },
-                    child:const DefaultCustomText(
-                        text: AppStrings.ok,),
-                  ),
-                ],
-              )
-            ],
-          );
-        });
-  }
-
-  void choosePhotoDialog(context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: DefaultCustomText(
-              text: 'Options',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            content: const Divider(),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        pickImageWithCamera(context);
-                      },
-                      child: Row(
-                        children: const [
-                          Icon(Icons.camera),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text('Camera')
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        pickImageWithGallery(context);
-                      },
-                      child: Row(
-                        children: const [
-                          Icon(Icons.picture_in_picture),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text('Gallery')
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          );
-        });
+  void signOutMethod(context) async {
+    await auth.signOut().then((value) {
+      GlobalMethods.navigateAndFinish(context, const UserLoginStates());
+    });
   }
 
   Future pickImageWithCamera(context) async {
@@ -253,5 +160,11 @@ class AuthCubit extends Cubit<AuthState> {
       print(e.toString());
       GlobalMethods.showSnackBar(context, e.toString(), Colors.blue);
     }
+  }
+
+  bool isDark = false;
+  changeAppMode(){
+    isDark = !isDark;
+    emit(ChangeAppMode());
   }
 }

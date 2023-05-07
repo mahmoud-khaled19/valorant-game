@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workers/view/components_items/comments_item.dart';
+import 'package:workers/app_constance/firebase_constance.dart';
+import 'package:workers/view/components_items/comment_item.dart';
 import 'package:workers/view_model/main_app_cubit/main_app_cubit.dart';
 
 import '../../../../view_model/main_app_cubit/main_app_state.dart';
@@ -16,7 +17,7 @@ final String? taskId;
         MainAppCubit cubit =BlocProvider.of(context);
         return FutureBuilder<DocumentSnapshot>(
             future: cubit.authStore
-                .collection('tasks')
+                .collection(FirebaseConstance.taskCollection)
                 .doc(taskId)
                 .get(),
             builder: (context, snapShots) {

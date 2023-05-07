@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workers/app_constance/colors_manager.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/view/screens/auth/register_screen.dart';
 import '../../../app_constance/strings_manager.dart';
@@ -42,7 +43,9 @@ class LoginScreen extends StatelessWidget {
                       DefaultCustomText(
                         alignment: Alignment.centerLeft,
                         text: AppStrings.login,
-                        style: Theme.of(context).textTheme.headlineLarge,
+                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          color: ColorsManager.lightScaffoldColor
+                        ),
                       ),
                       const SizedBox(
                         height: AppSize.s10,
@@ -50,7 +53,9 @@ class LoginScreen extends StatelessWidget {
                       DefaultCustomText(
                         alignment: Alignment.centerLeft,
                         text: AppStrings.welcomeMessage,
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: ColorsManager.lightScaffoldColor
+                        ),
                       ),
                       const SizedBox(
                         height: AppSize.s30,
@@ -148,7 +153,9 @@ class LoginScreen extends StatelessWidget {
                       ),
                       DefaultCustomText(
                         text: AppStrings.or,
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: ColorsManager.lightScaffoldColor
+                        ),
                       ),
                       const SizedBox(
                         height: AppSize.s20,
@@ -164,16 +171,6 @@ class LoginScreen extends StatelessWidget {
                           image: AssetImage(Assets.imagesEmail),
                         ),
                       ),
-                      const SizedBox(
-                        height: AppSize.s10,
-                      ),
-                      DefaultListTile(
-                          title: AppStrings.signUpWithGmail,
-                          function: () {},
-                          leadingWidget: const Image(
-                            height: AppSize.s30,
-                            image: AssetImage(Assets.imagesGoogle),
-                          )),
                     ],
                   ),
                 ),

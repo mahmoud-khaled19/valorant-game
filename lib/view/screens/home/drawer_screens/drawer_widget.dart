@@ -5,12 +5,13 @@ import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/app_constance/values_manager.dart';
 import 'package:workers/view/screens/home/drawer_screens/add_task_screen.dart';
 import 'package:workers/view/screens/home/drawer_screens/workers.dart';
-import '../../app_constance/strings_manager.dart';
-import '../../view_model/auth_cubit/auth_cubit.dart';
-import '../../view_model/auth_cubit/auth_state.dart';
-import '../screens/home/drawer_screens/account_screen.dart';
-import 'default_custom_text.dart';
-import 'default_list_tile.dart';
+import 'package:workers/view_model/main_app_cubit/main_app_cubit.dart';
+import '../../../../app_constance/strings_manager.dart';
+import '../../../../view_model/auth_cubit/auth_cubit.dart';
+import '../../../../view_model/auth_cubit/auth_state.dart';
+import 'account_screen.dart';
+import '../../../widgets/default_custom_text.dart';
+import '../../../widgets/default_list_tile.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({
@@ -22,13 +23,11 @@ class DrawerWidget extends StatelessWidget {
     AuthCubit cubit = BlocProvider.of(context);
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
-        print(cubit.imageUrl);
         return Drawer(
           child: Column(
             children: [
               DrawerHeader(
-                decoration:
-                    BoxDecoration(color: Theme.of(context).splashColor),
+                decoration: BoxDecoration(color: Theme.of(context).splashColor),
                 child: Column(
                   children: [
                     CircleAvatar(
@@ -86,13 +85,29 @@ class DrawerWidget extends StatelessWidget {
                 },
                 leadingWidget: const Icon(Icons.add_task),
               ),
+              DefaultListTile(
+                title:cubit.isDark? AppStrings.lightMode:AppStrings.darkMode,
+                function: () {
+                  cubit.changeAppMode();
+
+                },
+                leadingWidget:  Icon(cubit.isDark?Icons.brightness_4:Icons.dark_mode),
+              ),
+              DefaultListTile(
+                title: 'Change Language',
+                function: () {
+                  /// Localization.
+                },
+                leadingWidget: const Icon(Icons.language_sharp),
+              ),
               const Divider(
                 thickness: 3,
               ),
               DefaultListTile(
                 title: AppStrings.logout,
                 function: () {
-                  cubit.signOutMethod(context);
+                  GlobalMethods.signOutMethod(
+                      context, () => cubit.signOutMethod(context));
                 },
                 leadingWidget: const Icon(Icons.power_settings_new_outlined),
               ),

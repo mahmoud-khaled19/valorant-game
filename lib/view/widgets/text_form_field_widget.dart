@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../app_constance/values_manager.dart';
 
 class DefaultTextFormField extends StatelessWidget {
@@ -25,7 +24,7 @@ class DefaultTextFormField extends StatelessWidget {
     this.onSubmittedFunction,
     this.maxLength,
     this.enabled,
-    this.maxLines =1,
+    this.maxLines = 1,
     required this.controller,
     required this.validate,
     required this.label,
@@ -35,7 +34,8 @@ class DefaultTextFormField extends StatelessWidget {
     this.suffixFunction,
     this.isSecure = false,
     this.textType = TextInputType.emailAddress,
-    this.textTypeAction = TextInputAction.done, this.focusNode,
+    this.textTypeAction = TextInputAction.done,
+    this.focusNode,
   });
 
   @override
@@ -70,7 +70,7 @@ class DefaultTextFormField extends StatelessWidget {
                     color: Theme.of(context).splashColor,
                   )),
               labelText: label,
-              labelStyle: Theme.of(context).textTheme.titleSmall,
+              labelStyle: Theme.of(context).textTheme.titleMedium,
               border: OutlineInputBorder(
                 borderSide: const BorderSide(width: AppSize.s1),
                 borderRadius: BorderRadius.circular(AppSize.s10),

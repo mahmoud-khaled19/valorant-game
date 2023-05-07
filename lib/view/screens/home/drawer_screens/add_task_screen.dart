@@ -21,199 +21,207 @@ class AddTaskScreen extends StatelessWidget {
     final TextEditingController descriptionController = TextEditingController();
     final TextEditingController deadLineDateController =
         TextEditingController();
-    return BlocBuilder<MainAppCubit, MainAppState>(
-      builder: (context, state) {
-        MainAppCubit cubit = BlocProvider.of(context);
-        return Scaffold(
-          body: Form(
-            key: formKey,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 40, right: 20, left: 20),
-              child: ListView(
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  DefaultCustomText(
-                      text: AppStrings.allFieldsRequired,
-                      style: Theme.of(context).textTheme.titleLarge),
-                  const Divider(
-                    thickness: 4,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  DefaultTextFormField(
-                    function: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Center(
-                                child: Text(
-                                  AppStrings.tasks,
-                                ),
-                              ),
-                              content: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.7,
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  physics: const BouncingScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        categoryController.text =
-                                            GlobalMethods.tasksSort[index];
-                                        Navigator.pop(context);
-                                      },
-                                      child: Row(
-                                        children: [
-                                          const Icon(Icons.check_box),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            GlobalMethods.tasksSort[index],
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall
-                                                ?.copyWith(
-                                                    fontStyle:
-                                                        FontStyle.italic),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  itemCount: GlobalMethods.tasksSort.length,
-                                  separatorBuilder:
-                                      (BuildContext context, int index) =>
-                                          const Divider(),
-                                ),
-                              ),
-                              actions: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const DefaultCustomText(
-                                          text: AppStrings.close,)
-                                    ),
-                                  ],
-                                )
-                              ],
-                            );
-                          });
-                    },
-                    enabled: false,
-                    controller: categoryController,
-                    validate: (String? value) {
-                      if (value!.isEmpty) {
-                        return categoryController.text = 'Choose Category';
-                      }
-                      return null;
-                    },
-                    label: 'Task Category',
-                  ),
-                  DefaultTextFormField(
-                    maxLength: 30,
-                    controller: taskTitleController,
-                    validate: (String? value) {
-                      if (value!.isEmpty) {
-                        return 'Task Title is Necessary';
-                      }
-                      return null;
-                    },
-                    label: AppStrings.taskTitle,
-                  ),
-                  DefaultTextFormField(
-                    maxLines: 3,
-                    maxLength: 1000,
-                    controller: descriptionController,
-                    validate: (String? value) {
-                      if (value!.isEmpty) {
-                        return 'Task Title is Necessary';
-                      }
-                      return null;
-                    },
-                    label: 'Task Description',
-                  ),
-                  DefaultTextFormField(
-                    enabled: false,
-                    function: () async {
-                      await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2024))
-                          .then((value) {
-                        cubit.deadLineTimestamp =
-                            Timestamp.fromMicrosecondsSinceEpoch(
-                                value!.microsecondsSinceEpoch);
-                        deadLineDateController.text =
-                            '${value.year}/${value.month}/${value.day}';
-                      });
-                    },
-                    controller: deadLineDateController,
-                    validate: (String? value) {
-                      if (value!.isEmpty) {
-                        return 'Pick up dead Line Date';
-                      }
-                    },
-                    textType: TextInputType.number,
-                    label: 'Dead line Date',
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Visibility(
-                    visible: state is! UploadTaskLoadingState,
-                    replacement: const Center(
-                      child: CircularProgressIndicator(),
+    return BlocProvider(
+      create: (context) => MainAppCubit(),
+      child: BlocBuilder<MainAppCubit, MainAppState>(
+        builder: (context, state) {
+          MainAppCubit cubit = BlocProvider.of(context);
+          return Scaffold(
+            body: Form(
+              key: formKey,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 40, right: 20, left: 20),
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    DefaultCustomText(
+                        text: AppStrings.allFieldsRequired,
+                        style: Theme.of(context).textTheme.titleLarge),
+                    const Divider(
+                      thickness: 4,
                     ),
-                    child: DefaultButton(
-                        text: AppStrings.upload,
-                        function: () {
-                          if (formKey.currentState!.validate()) {
-                            cubit
-                                .uploadTask(
-                              taskCategory: categoryController.text,
-                              taskTitle: taskTitleController.text,
-                              taskDescription: descriptionController.text,
-                              deadLineTimeStamp: cubit.deadLineTimestamp?? Timestamp.fromDate(DateTime.now()),
-                              context: context,
-                            )
-                                .then((value) {
-                              categoryController.clear();
-                              taskTitleController.clear();
-                              descriptionController.clear();
-                              deadLineDateController.clear();
-                            });
-                          } else {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text(AppStrings.fillFields),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text(AppStrings.close))
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    DefaultTextFormField(
+                      function: () {
+                        GlobalMethods.showAlertDialog(
+                          context: context,
+                          title: const Center(
+                            child: Text(
+                              AppStrings.tasks,
+                            ),
+                          ),
+                          content: SizedBox(
+                            width:
+                            MediaQuery.of(context).size.width * 0.7,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    categoryController.text =
+                                    GlobalMethods.tasksSort[index];
+                                    Navigator.pop(context);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.check_box),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        GlobalMethods.tasksSort[index],
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(
+                                            fontStyle:
+                                            FontStyle.italic),
+                                      ),
                                     ],
-                                  );
-                                });
-                          }
-                        }),
-                  )
-                ],
+                                  ),
+                                );
+                              },
+                              itemCount: GlobalMethods.tasksSort.length,
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                              const Divider(),
+                            ),
+                          ),
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: DefaultCustomText(
+                                      text: AppStrings.close,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall,
+                                    )),
+                              ],
+                            )
+                          ],
+                        );
+                      },
+                      enabled: false,
+                      controller: categoryController,
+                      validate: (String? value) {
+                        if (value!.isEmpty) {
+                          return categoryController.text = 'Choose Category';
+                        }
+                        return null;
+                      },
+                      label: 'Task Category',
+                    ),
+                    DefaultTextFormField(
+                      maxLength: 30,
+                      controller: taskTitleController,
+                      validate: (String? value) {
+                        if (value!.isEmpty) {
+                          return AppStrings.taskTitleValidation;
+                        }
+                        return null;
+                      },
+                      label: AppStrings.taskTitle,
+                    ),
+                    DefaultTextFormField(
+                      maxLines: 3,
+                      maxLength: 1000,
+                      controller: descriptionController,
+                      validate: (String? value) {
+                        if (value!.isEmpty) {
+                          return AppStrings.taskDescriptionValidation;
+                        }
+                        return null;
+                      },
+                      label: 'Task Description',
+                    ),
+                    DefaultTextFormField(
+                      enabled: false,
+                      function: () async {
+                        await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2024))
+                            .then((value) {
+                          cubit.deadLineTimestamp =
+                              Timestamp.fromMicrosecondsSinceEpoch(
+                                  value!.microsecondsSinceEpoch);
+                          deadLineDateController.text =
+                              '${value.year}/${value.month}/${value.day}';
+                        });
+                      },
+                      controller: deadLineDateController,
+                      validate: (String? value) {
+                        if (value!.isEmpty) {
+                          return 'Pick up dead Line Date';
+                        }
+                        return null;
+                      },
+                      textType: TextInputType.number,
+                      label: 'Dead line Date',
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Visibility(
+                      visible: state is! UploadTaskLoadingState,
+                      replacement: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      child: DefaultButton(
+                          text: AppStrings.upload,
+                          function: () {
+                            if (formKey.currentState!.validate()) {
+                              cubit
+                                  .uploadTask(
+                                taskCategory: categoryController.text,
+                                taskTitle: taskTitleController.text,
+                                taskDescription: descriptionController.text,
+                                deadLineTimeStamp: cubit.deadLineTimestamp ??
+                                    Timestamp.fromDate(DateTime.now()),
+                                context: context,
+                              )
+                                  .then((value) {
+                                categoryController.clear();
+                                taskTitleController.clear();
+                                descriptionController.clear();
+                                deadLineDateController.clear();
+                              });
+                              Navigator.pop(context);
+                              GlobalMethods.showSnackBar(context,AppStrings.taskUploaded, Colors.green);
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text(AppStrings.fillFields),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text(AppStrings.close))
+                                      ],
+                                    );
+                                  });
+                            }
+                          }),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -20,6 +20,9 @@ class TaskData extends StatelessWidget {
     double hSize = MediaQuery.of(context).size.height;
     double wSize = MediaQuery.of(context).size.width;
     var user = FirebaseAuth.instance.currentUser!.uid;
+    TextStyle? style =Theme.of(context).textTheme.titleMedium?.copyWith(
+      fontSize: 14
+    );
     return BlocBuilder<MainAppCubit, MainAppState>(
       builder: (context, state) {
         MainAppCubit cubit = BlocProvider.of(context);
@@ -34,7 +37,10 @@ class TaskData extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const DefaultCustomText(text: AppStrings.uploadedBy),
+                   DefaultCustomText(text: AppStrings.uploadedBy,
+                    style: Theme.of(context).textTheme.titleMedium,
+
+                  ),
                   const SizedBox(
                     width: 40,
                   ),
@@ -65,14 +71,15 @@ class TaskData extends StatelessWidget {
                       children: [
                         DefaultCustomText(
                           text: cubit.name ?? AppStrings.tasks,
+                          style: style,
                         ),
                         SizedBox(
                           height: hSize * 0.005,
                         ),
                         DefaultCustomText(
+                            style: style,
                             text: cubit.position ?? AppStrings.tasks,
-                            fontSize: 12,
-                            color: Colors.grey.shade200),
+                            fontSize: 12,),
                       ],
                     ),
                   )
@@ -89,6 +96,7 @@ class TaskData extends StatelessWidget {
                       text: 'Uploaded on',
                       style: Theme.of(context).textTheme.titleMedium),
                   DefaultCustomText(
+                    style: style,
                     alignment: Alignment.centerRight,
                     text: cubit.uploadedOn.toString(),
                   ),
@@ -102,9 +110,10 @@ class TaskData extends StatelessWidget {
                 children: [
                   DefaultCustomText(
                       alignment: Alignment.centerLeft,
-                      text: 'Dead Line Date',
+                      text: AppStrings.deadLine,
                       style: Theme.of(context).textTheme.titleMedium),
                   DefaultCustomText(
+                    style: style,
                     alignment: Alignment.centerRight,
                     text: cubit.deadLineDate ?? '',
                   ),
@@ -114,9 +123,10 @@ class TaskData extends StatelessWidget {
                 height: AppSize.s16,
               ),
               DefaultCustomText(
+                style: style,
                 text: cubit.isDeadLineFinished!
-                    ? 'Still Have Time'
-                    : 'Finished Task Time',
+                    ? AppStrings.stillHaveTime
+                    : AppStrings.finishTime,
                 color: Colors.green,
               ),
               const Divider(
@@ -176,6 +186,7 @@ class TaskData extends StatelessWidget {
                 height: AppSize.s10,
               ),
               DefaultCustomText(
+                style: style,
                 alignment: Alignment.centerLeft,
                 text: cubit.taskDescription ?? AppStrings.tasks,
               ),

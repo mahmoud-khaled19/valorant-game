@@ -20,54 +20,56 @@ class TasksDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MainAppCubit()
-        ..getTasksData(context, taskId: taskId, upLoadedBy: uploadedBy),
+      create: (context) => MainAppCubit()..getTasksData(context, taskId: taskId, upLoadedBy: uploadedBy),
       child: BlocBuilder<MainAppCubit, MainAppState>(
         builder: (context, state) {
           MainAppCubit cubit = BlocProvider.of(context);
           return state is GetTaskDataLoadingState
               ? const Center(
-                  child: CircularProgressIndicator(),
-                )
+            child: CircularProgressIndicator(),
+          )
               : Scaffold(
-                  body: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: ListView(
-                      physics: const BouncingScrollPhysics(),
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(left: 20, top: 60),
-                            child: DefaultCustomText(
-                              alignment: Alignment.centerLeft,
-                              text: AppStrings.back,
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: AppSize.s16),
-                        DefaultCustomText(
-                            text: cubit.taskTitle ?? AppStrings.tasks,
-                            style: Theme.of(context).textTheme.headlineLarge),
-                        const SizedBox(height: AppSize.s14),
-                        TaskData(
-                          taskId: taskId,
-                          uploadedBy: uploadedBy,
-                        ),
-                        const SizedBox(height: AppSize.s14),
-                        CommentsList(
-                          taskId: taskId,
-                        )
-                      ],
+            body: Padding(
+              padding: const EdgeInsets.all(15),
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 20, top: 60),
+                      child: DefaultCustomText(
+                        alignment: Alignment.centerLeft,
+                        text: AppStrings.back,
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
                   ),
-                );
+                  const SizedBox(height: AppSize.s16),
+                  DefaultCustomText(
+                      text: cubit.taskTitle ?? AppStrings.tasks,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headlineLarge),
+                  const SizedBox(height: AppSize.s14),
+                  TaskData(
+                    taskId: taskId,
+                    uploadedBy: uploadedBy,
+                  ),
+                  const SizedBox(height: AppSize.s14),
+                  CommentsList(
+                    taskId: taskId,
+                  )
+                ],
+              ),
+            ),
+          );
         },
       ),
     );

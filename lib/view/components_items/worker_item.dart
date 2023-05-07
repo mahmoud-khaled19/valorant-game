@@ -38,7 +38,7 @@ class WorkerItem extends StatelessWidget {
             ));
       },
       child: Card(
-        color: Theme.of(context).dividerColor,
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: ListTile(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -78,7 +78,9 @@ class WorkerItem extends StatelessWidget {
                 position,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleSmall,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontSize: 14
+                ),
               ),
               const SizedBox(
                 height: 10,
@@ -87,7 +89,9 @@ class WorkerItem extends StatelessWidget {
                 phone,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleSmall,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontSize: 14
+                ),
               ),
             ],
           ),

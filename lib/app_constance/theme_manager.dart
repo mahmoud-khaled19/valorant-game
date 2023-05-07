@@ -10,10 +10,10 @@ ThemeData getLightApplicationTheme() {
               backgroundColor: MaterialStateProperty.all(
         ColorsManager.lightIconsColor,
       ))),
-      appBarTheme: AppBarTheme(
+            appBarTheme: AppBarTheme(
           titleTextStyle: const TextStyle(
               fontSize: AppSize.s18, fontWeight: FontWeight.bold),
-          backgroundColor: ColorsManager.darkScaffoldColor,
+          backgroundColor: ColorsManager.lightScaffoldColor,
           elevation: 0,
           iconTheme: IconThemeData(color: ColorsManager.black)),
       drawerTheme:
@@ -34,7 +34,7 @@ ThemeData getLightApplicationTheme() {
           titleMedium:
               getMediumStyle(fontSize: AppSize.s16, color: ColorsManager.black),
           titleSmall: getRegularStyle(
-              fontSize: AppSize.s14, color: ColorsManager.black)),
+              fontSize: AppSize.s14, color: ColorsManager.lightScaffoldColor)),
       brightness: Brightness.light);
 }
 

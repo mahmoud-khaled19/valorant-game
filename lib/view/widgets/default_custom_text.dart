@@ -11,7 +11,7 @@ class DefaultCustomText extends StatelessWidget {
     super.key,
     required this.text,
     this.alignment = Alignment.center,
-    this.style,
+    required this.style,
     this.color,
     this.fontSize,
   });
@@ -22,9 +22,7 @@ class DefaultCustomText extends StatelessWidget {
       alignment: alignment,
       child: Text(
         text,
-        style: Theme.of(context)
-            .textTheme
-            .titleSmall
+        style: style
             ?.copyWith(fontSize: fontSize, color: color),
       ),
     );

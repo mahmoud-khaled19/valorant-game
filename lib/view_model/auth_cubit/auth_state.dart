@@ -6,6 +6,8 @@ class ChangePasswordVisibility extends AuthState {}
 
 class ChangeImage extends AuthState {}
 
+class ChangeAppMode extends AuthState {}
+
 class CropImage extends AuthState {}
 
 class CurveAnimationState extends AuthState {}

@@ -6,7 +6,7 @@ import 'package:workers/generated/assets.dart';
 import 'package:workers/view/screens/login_error_screen.dart';
 
 import '../../../components_items//worker_item.dart';
-import '../../../widgets/drawer_widget.dart';
+import 'drawer_widget.dart';
 import 'account_screen.dart';
 
 class WorkersScreen extends StatelessWidget {
@@ -22,9 +22,9 @@ class WorkersScreen extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (snapShot.connectionState == ConnectionState.active) {
-          if (snapShot.data!.docs.isNotEmpty) {
+          if (snapShot.data!.docs.isNotEmpty && snapShot.data != null) {
             return Scaffold(
-              drawer:  DrawerWidget(),
+              drawer:  const DrawerWidget(),
               appBar: AppBar(
                 centerTitle: true,
                 title: Text(
