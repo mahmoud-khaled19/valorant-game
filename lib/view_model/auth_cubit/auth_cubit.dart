@@ -148,7 +148,6 @@ class AuthCubit extends Cubit<AuthState> {
       GlobalMethods.showSnackBar(context, e.toString(), Colors.blue);
     }
   }
-
   pickImageWithGallery(context) async {
     try {
       XFile? pickedFile = await ImagePicker().pickImage(
@@ -162,7 +161,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  bool isDark = false;
+  bool isDark = true;
   changeAppMode(){
     isDark = !isDark;
     emit(ChangeAppMode());

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:workers/generated/assets.dart';
 
 import '../../app_constance/assets_manager.dart';
 
@@ -42,11 +43,8 @@ class _LoginAnimationWidget extends State<LoginAnimationWidget>
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: ImagesManager.loginImage,
-      placeholder: (context, url) =>
-          const Center(child: CircularProgressIndicator()),
-      errorWidget: (context, url, error) => const Icon(Icons.error),
+    return Image(
+image:const  AssetImage(Assets.imagesLoginImage),
       fit: BoxFit.cover,
       width: double.infinity,
       height: double.infinity,

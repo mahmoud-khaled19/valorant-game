@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/app_constance/strings_manager.dart';
@@ -44,14 +45,14 @@ class ForgotPasswordScreen extends StatelessWidget {
                 controller: emailController,
                 validator: (String? value) {
                   if (value!.isEmpty) {
-                    return AppStrings.emailValidateMessage;
+                    return AppStrings.emailValidateMessage.tr();
                   }
                   return null;
                 },
                 decoration: InputDecoration(
                   filled: true,
-                  label: const Text(
-                    AppStrings.labelEmail,
+                  label:  Text(
+                    AppStrings.labelEmail.tr(),
                   ),
                   labelStyle: Theme.of(context)
                       .textTheme

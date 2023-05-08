@@ -14,31 +14,34 @@ class UserLoginStates extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthCubit, AuthState>(
-      builder: (context, state) {
-        AuthCubit cubit = BlocProvider.of(context);
-        return StreamBuilder(
-            stream: cubit.auth.authStateChanges(),
-            builder: (context, userSnapshot) {
-              if (userSnapshot.data == null) {
-                return const LoginScreen();
+    return BlocProvider(
+      create: (context) => AuthCubit()..getUserData(context),
+      child: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          AuthCubit cubit = BlocProvider.of(context);
+          return StreamBuilder(
+              stream: cubit.auth.authStateChanges(),
+              builder: (context, userSnapshot) {
+                if (userSnapshot.data == null) {
+                  return const LoginScreen();
+                }
+                else if (userSnapshot.hasData) {
+                  return const HomeScreen();
+                }
+                else if (userSnapshot.hasError) {
+                  return const EmptyScreen(
+                      text: AppStrings.errorMessage,
+                      image: Assets.imagesNoNews);
+                }
+                return const Scaffold(
+                  body: Center(
+                    child: Text('Restart The App'),
+                  ),
+                );
               }
-              else if (userSnapshot.hasData) {
-                return const HomeScreen();
-              }
-              else if (userSnapshot.hasError) {
-                return const EmptyScreen(
-                    text: AppStrings.errorMessage,
-                    image: Assets.imagesNoNews);
-              }
-              return const Scaffold(
-                body: Center(
-                  child: Text('Restart The App'),
-                ),
-              );
-            }
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

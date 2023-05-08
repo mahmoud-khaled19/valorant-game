@@ -64,7 +64,7 @@ class GlobalMethods {
           return AlertDialog(
             title: const Center(
               child: Text(
-                AppStrings.signOut,
+                AppStrings.logout,
               ),
             ),
             content: SizedBox(

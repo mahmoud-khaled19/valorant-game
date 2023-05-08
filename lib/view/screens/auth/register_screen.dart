@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/app_constance/assets_manager.dart';
-import 'package:workers/app_constance/colors_manager.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import '../../../app_constance/strings_manager.dart';
 import '../../../app_constance/values_manager.dart';
@@ -48,10 +48,8 @@ class RegisterScreen extends StatelessWidget {
                         ),
                         DefaultCustomText(
                           alignment: Alignment.centerLeft,
-                          text: AppStrings.register,
-                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: ColorsManager.lightScaffoldColor
-                          ),
+                          text: AppStrings.register.tr(),
+                          style: Theme.of(context).textTheme.headlineLarge
                         ),
                         const SizedBox(
                           height: AppSize.s10,
@@ -59,9 +57,7 @@ class RegisterScreen extends StatelessWidget {
                         DefaultCustomText(
                           alignment: Alignment.centerLeft,
                           text: AppStrings.registerMessage,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: ColorsManager.lightScaffoldColor
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
                         ),
                         const SizedBox(
                           height: AppSize.s20,
@@ -79,7 +75,7 @@ class RegisterScreen extends StatelessWidget {
                                     return null;
                                   }
                                 },
-                                label: AppStrings.labelName,
+                                label: AppStrings.labelName.tr(),
                                 prefixIcon: Icons.person,
                               ),
                             ),
@@ -134,12 +130,12 @@ class RegisterScreen extends StatelessWidget {
                                                           context);
                                                     },
                                                     child: Row(
-                                                      children: const [
-                                                        Icon(Icons.camera),
-                                                        SizedBox(
+                                                      children:  [
+                                                        const Icon(Icons.camera),
+                                                        const SizedBox(
                                                           width: 15,
                                                         ),
-                                                        Text(AppStrings.camera)
+                                                        Text(AppStrings.camera.tr())
                                                       ],
                                                     ),
                                                   ),
@@ -153,13 +149,13 @@ class RegisterScreen extends StatelessWidget {
                                                               context);
                                                     },
                                                     child: Row(
-                                                      children: const [
-                                                        Icon(Icons
+                                                      children:  [
+                                                        const Icon(Icons
                                                             .picture_in_picture),
-                                                        SizedBox(
+                                                        const SizedBox(
                                                           width: 15,
                                                         ),
-                                                        Text(AppStrings.gallery)
+                                                        Text(AppStrings.gallery.tr())
                                                       ],
                                                     ),
                                                   ),
@@ -187,7 +183,7 @@ class RegisterScreen extends StatelessWidget {
                               return null;
                             }
                           },
-                          label: AppStrings.labelPhone,
+                          label: AppStrings.labelPhone.tr(),
                           prefixIcon: Icons.phone,
                         ),
                         DefaultTextFormField(
@@ -210,12 +206,12 @@ class RegisterScreen extends StatelessWidget {
                           controller: emailController,
                           validate: (String? value) {
                             if (value!.isEmpty) {
-                              return AppStrings.emailValidateMessage;
+                              return AppStrings.emailValidateMessage.tr();
                             } else {
                               return null;
                             }
                           },
-                          label: AppStrings.labelEmail,
+                          label: AppStrings.labelEmail.tr(),
                           prefixIcon: Icons.email,
                         ),
                         DefaultTextFormField(
@@ -230,11 +226,11 @@ class RegisterScreen extends StatelessWidget {
                           },
                           validate: (String? value) {
                             if (value!.isEmpty) {
-                              return AppStrings.passwordValidateMessage;
+                              return AppStrings.passwordValidateMessage.tr();
                             } else {}
                             return null;
                           },
-                          label: AppStrings.labelPassword,
+                          label: AppStrings.labelPassword.tr(),
                           prefixIcon: Icons.lock,
                         ),
                         const SizedBox(
@@ -246,7 +242,7 @@ class RegisterScreen extends StatelessWidget {
                             child: CircularProgressIndicator(),
                           ),
                           child: DefaultButton(
-                              text: AppStrings.login,
+                              text: AppStrings.login.tr(),
                               function: () {
                                 if (formKey.currentState!.validate()) {
                                   if (cubit.imageFile != null) {
@@ -282,9 +278,9 @@ class RegisterScreen extends StatelessWidget {
                                   GlobalMethods.navigateTo(
                                       context, const LoginScreen());
                                 },
-                                child: const Text(
-                                  AppStrings.login,
-                                  style: TextStyle(color: Colors.blue),
+                                child:  Text(
+                                  AppStrings.login.tr(),
+                                  style: const TextStyle(color: Colors.blue),
                                 ))
                           ],
                         ),

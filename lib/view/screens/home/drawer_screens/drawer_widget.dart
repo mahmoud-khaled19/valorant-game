@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workers/app_constance/assets_manager.dart';
@@ -5,7 +6,6 @@ import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/app_constance/values_manager.dart';
 import 'package:workers/view/screens/home/drawer_screens/add_task_screen.dart';
 import 'package:workers/view/screens/home/drawer_screens/workers.dart';
-import 'package:workers/view_model/main_app_cubit/main_app_cubit.dart';
 import '../../../../app_constance/strings_manager.dart';
 import '../../../../view_model/auth_cubit/auth_cubit.dart';
 import '../../../../view_model/auth_cubit/auth_state.dart';
@@ -31,7 +31,7 @@ class DrawerWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     CircleAvatar(
-                      radius: 50,
+                      radius: 40,
                       child: Container(
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -45,7 +45,7 @@ class DrawerWidget extends StatelessWidget {
                       height: AppSize.s10,
                     ),
                     DefaultCustomText(
-                        text: AppStrings.appTitle,
+                        text: AppStrings.appTitle.tr(),
                         style: Theme.of(context).textTheme.titleMedium)
                   ],
                 ),
@@ -54,7 +54,7 @@ class DrawerWidget extends StatelessWidget {
                 height: AppSize.s20,
               ),
               DefaultListTile(
-                title: AppStrings.allTasks,
+                title: AppStrings.allTasks.tr(),
                 function: () {
                   Navigator.pop(context);
                 },
@@ -72,7 +72,7 @@ class DrawerWidget extends StatelessWidget {
                 leadingWidget: const Icon(Icons.account_circle_sharp),
               ),
               DefaultListTile(
-                title: AppStrings.workers,
+                title: AppStrings.workers.tr(),
                 function: () {
                   GlobalMethods.navigateTo(context, const WorkersScreen());
                 },
@@ -86,20 +86,15 @@ class DrawerWidget extends StatelessWidget {
                 leadingWidget: const Icon(Icons.add_task),
               ),
               DefaultListTile(
-                title:cubit.isDark? AppStrings.lightMode:AppStrings.darkMode,
+                title:
+                    cubit.isDark ? AppStrings.lightMode : AppStrings.darkMode,
                 function: () {
                   cubit.changeAppMode();
+                },
+                leadingWidget:
+                    Icon(cubit.isDark ? Icons.brightness_4 : Icons.dark_mode),
+              ),
 
-                },
-                leadingWidget:  Icon(cubit.isDark?Icons.brightness_4:Icons.dark_mode),
-              ),
-              DefaultListTile(
-                title: 'Change Language',
-                function: () {
-                  /// Localization.
-                },
-                leadingWidget: const Icon(Icons.language_sharp),
-              ),
               const Divider(
                 thickness: 3,
               ),

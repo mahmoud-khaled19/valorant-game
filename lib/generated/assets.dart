@@ -6,6 +6,7 @@ class Assets {
   static const String imagesEmail = 'assets/images/email.png';
   static const String imagesFacebook = 'assets/images/facebook.png';
   static const String imagesGoogle = 'assets/images/google.png';
+  static const String imagesLoginImage = 'assets/images/login_image.jpg';
   static const String imagesNoNews = 'assets/images/no_news.png';
   static const String translationsAr = 'assets/translations/ar.json';
   static const String translationsEn = 'assets/translations/en.json';

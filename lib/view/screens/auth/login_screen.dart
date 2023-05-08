@@ -1,6 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workers/app_constance/colors_manager.dart';
 import 'package:workers/app_constance/global_methods.dart';
 import 'package:workers/view/screens/auth/register_screen.dart';
 import '../../../app_constance/strings_manager.dart';
@@ -12,6 +12,7 @@ import '../../widgets/animation_login_widget.dart';
 import '../../widgets/default_button_widget.dart';
 import '../../widgets/default_custom_text.dart';
 import '../../widgets/default_list_tile.dart';
+import '../../widgets/localization.dart';
 import '../../widgets/text_form_field_widget.dart';
 import 'forgot_password.dart';
 
@@ -41,22 +42,16 @@ class LoginScreen extends StatelessWidget {
                         height: AppSize.s70,
                       ),
                       DefaultCustomText(
-                        alignment: Alignment.centerLeft,
-                        text: AppStrings.login,
-                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: ColorsManager.lightScaffoldColor
-                        ),
-                      ),
+                          alignment: Alignment.centerLeft,
+                          text: AppStrings.login.tr(),
+                          style: Theme.of(context).textTheme.headlineLarge),
                       const SizedBox(
                         height: AppSize.s10,
                       ),
                       DefaultCustomText(
-                        alignment: Alignment.centerLeft,
-                        text: AppStrings.welcomeMessage,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: ColorsManager.lightScaffoldColor
-                        ),
-                      ),
+                          alignment: Alignment.centerLeft,
+                          text: AppStrings.welcomeMessage.tr(),
+                          style: Theme.of(context).textTheme.titleLarge),
                       const SizedBox(
                         height: AppSize.s30,
                       ),
@@ -64,12 +59,12 @@ class LoginScreen extends StatelessWidget {
                         controller: emailController,
                         validate: (String? value) {
                           if (value!.isEmpty) {
-                            return AppStrings.emailValidateMessage;
+                            return AppStrings.emailValidateMessage.tr();
                           } else {
                             return null;
                           }
                         },
-                        label: AppStrings.labelEmail,
+                        label: AppStrings.labelEmail.tr(),
                         prefixIcon: Icons.email,
                       ),
                       DefaultTextFormField(
@@ -96,12 +91,12 @@ class LoginScreen extends StatelessWidget {
                         },
                         validate: (String? value) {
                           if (value!.isEmpty && value.length < 6) {
-                            return AppStrings.passwordValidateMessage;
+                            return AppStrings.passwordValidateMessage.tr();
                           } else {
                             return null;
                           }
                         },
-                        label: AppStrings.labelPassword,
+                        label: AppStrings.labelPassword.tr(),
                         prefixIcon: Icons.lock,
                       ),
                       const SizedBox(
@@ -132,7 +127,7 @@ class LoginScreen extends StatelessWidget {
                           child: CircularProgressIndicator(),
                         ),
                         child: DefaultButton(
-                            text: AppStrings.login,
+                            text: AppStrings.login.tr(),
                             function: () {
                               if (formKey.currentState!.validate()) {
                                 cubit
@@ -152,16 +147,16 @@ class LoginScreen extends StatelessWidget {
                         height: AppSize.s20,
                       ),
                       DefaultCustomText(
-                        text: AppStrings.or,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: ColorsManager.lightScaffoldColor
-                        ),
+                        text: AppStrings.or.tr(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
                       ),
                       const SizedBox(
                         height: AppSize.s20,
                       ),
                       DefaultListTile(
-                        title: AppStrings.signUpWithEmail,
+                        title: AppStrings.signUpWithEmail.tr(),
                         function: () {
                           GlobalMethods.navigateAndFinish(
                               context, RegisterScreen());
@@ -171,6 +166,10 @@ class LoginScreen extends StatelessWidget {
                           image: AssetImage(Assets.imagesEmail),
                         ),
                       ),
+                      const SizedBox(
+                        height: AppSize.s20,
+                      ),
+                      const LocalizationTheme(),
                     ],
                   ),
                 ),
